@@ -1,0 +1,25 @@
+{
+  "name": "dab.irc.parser",
+  "version": "1.0.0",
+  "description": "Parsing logig for IRC. Depends on dab.irc.core",
+  "typings": "bin/src",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "dab",
+    "irc",
+    "library",
+    "parse",
+    "parser"
+  ],
+  "author": "dab",
+  "license": "MIT",
+  "dependencies": {
+    "dab.irc.core": "^1.0.0"
+  }
+}
