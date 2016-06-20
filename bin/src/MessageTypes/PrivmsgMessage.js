@@ -31,4 +31,3 @@ var PrivmsgMessage = (function (_super) {
     return PrivmsgMessage;
 }(Core.Message));
 exports.PrivmsgMessage = PrivmsgMessage;
-//# sourceMappingURL=PrivmsgMessage.js.map

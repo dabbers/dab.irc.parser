@@ -26,4 +26,3 @@ server.on("PRIVMSG", function (s, m) {
 });
 ctx.dataCallback = server.dataReceived;
 con.init(ctx);
-//# sourceMappingURL=sample.js.map

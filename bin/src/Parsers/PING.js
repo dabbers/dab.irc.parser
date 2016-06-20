@@ -23,4 +23,3 @@ var Ping = (function () {
     return Ping;
 }());
 exports.Ping = Ping;
-//# sourceMappingURL=PING.js.map

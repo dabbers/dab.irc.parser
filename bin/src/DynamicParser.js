@@ -25,4 +25,3 @@ var DynamicParser = (function () {
     return DynamicParser;
 }());
 exports.DynamicParser = DynamicParser;
-//# sourceMappingURL=DynamicParser.js.map

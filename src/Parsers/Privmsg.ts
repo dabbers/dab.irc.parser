@@ -7,8 +7,13 @@ import {DynamicParser} from '../DynamicParser';
 export class Privmsg implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
-        
-        callback(server, new PrivmsgMessage(message, server.attributes));
+        var attr = server.attributes;
+
+        if (!attr["CHANTYPES"]) {
+            attr["CHANTYPES"] = "#&";
+        }
+
+        callback(server, new PrivmsgMessage(message, attr));
         return true;
     }
 
@@ -17,7 +22,7 @@ export class Privmsg implements IParser<any> {
         if (context.constructor == DynamicParser) {
             var ctx = <DynamicParser>context;
             ctx.parserDictionary["PRIVMSG"] = this;
-
+            
             return;
         }
 

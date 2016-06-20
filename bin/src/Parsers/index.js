@@ -16,4 +16,3 @@ function getParsers() {
     return parsers;
 }
 exports.getParsers = getParsers;
-//# sourceMappingURL=index.js.map

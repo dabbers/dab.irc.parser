@@ -1,4 +1,5 @@
 import * as Core from 'dab.irc.core/src';
+import {Message} from 'dab.irc.core/src/Message';
 import {EventEmitter} from 'events';
 import {DynamicParser} from './DynamicParser';
 

@@ -24,4 +24,3 @@ var Privmsg = (function () {
     return Privmsg;
 }());
 exports.Privmsg = Privmsg;
-//# sourceMappingURL=Privmsg.js.map
