@@ -75,14 +75,6 @@ export class ParserServer extends Core.BaseServer {
         return (this.attributes["CHANTYPES"].indexOf(ch) != -1); 
     }
 
-    stringCompare(a : string, b: string) : number {
-        return -1;
-    }
-
-    userCompare(a : Core.User, b : Core.User) : number {
-        return -1;
-    }
-
     private events : EventEmitter;
     private parser : DynamicParser;
 }
