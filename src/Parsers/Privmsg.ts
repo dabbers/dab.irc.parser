@@ -16,12 +16,13 @@ export class Privmsg implements IParser<any> {
         if (context.constructor == DynamicParser) {
             var ctx = <DynamicParser>context;
             ctx.parserDictionary["PRIVMSG"] = this;
+            ctx.parserDictionary["NOTICE"] = this;
             
             return;
         }
 
         // Todo: make this more classy
-        throw "Invalid context passed to PRIVMSG parser";
+        throw "Invalid context passed to NOTICE/PRIVMSG parser";
     }
 
     // We are resuming. No state required for a parser
