@@ -1,14 +1,13 @@
 import {IParser} from '../IParser';
 import * as Core from 'dab.irc.core/src';
-import {PrivmsgMessage} from '../MessageTypes/PrivmsgMessage';
+import {ChannelUserChangeMessage} from '../MessageTypes/ChannelUserChangeMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 
-export class Ping implements IParser<any> {
+export class Part implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
-        
-        callback(server, message);
+        callback(server, new ChannelUserChangeMessage(message));
         return true;
     }
 
@@ -16,18 +15,17 @@ export class Ping implements IParser<any> {
     init(context : any) : void {
         if (context.constructor == DynamicParser) {
             var ctx = <DynamicParser>context;
-            ctx.parserDictionary["PING"] = this;
-
+            ctx.parserDictionary["PART"] = this;
+            
             return;
         }
 
         // Todo: make this more classy
-        throw "Invalid context passed to PRIVMSG parser";
+        throw "Invalid context passed to PART parser";
     }
 
     // We are resuming. No state required for a parser
     resume(state : any) : void {
-
     }
 
     // Unloading this module. No state needed for callback.

@@ -5,8 +5,6 @@ export function getParsers() : IParser<any>[] {
     var paths = fs.readdirSync(__dirname);
     var parsers : IParser<any>[] = [];
 
-console.log(paths);
-
     for(var i in paths) {
         if (paths[i].indexOf("index") == 0) continue;
         if (paths[i].indexOf(".ts") > 0 || paths[i].indexOf(".map") > 0) continue;

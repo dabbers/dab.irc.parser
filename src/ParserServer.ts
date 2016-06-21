@@ -20,11 +20,14 @@ export class ParserServer extends Core.BaseServer {
         });
     }
 
-
     dataReceived = (data: Core.Message) => {
-        this.parser.parse(this, data, (s, m) => {
+        var cb = (s : ParserServer, m: Core.Message) => {
             this.emit(m.command, this, m);
-        });
+        };
+
+        if (!this.parser.parse(this, data, cb)) {
+            this.emit(data.command, this, data);   
+        }
     }
     ///
     /// Recreating the event listener methods
@@ -61,6 +64,23 @@ export class ParserServer extends Core.BaseServer {
 
     toString() :string {
         return "[" + this.display + " ParserServer]";
+    }
+
+    isChannel(ch : string) : boolean {
+        // If not set, you are expected to assume these are their values
+        if (!this.attributes["CHANTYPES"]) {
+            this.attributes["CHANTYPES"] = "#&";
+        }
+
+        return (this.attributes["CHANTYPES"].indexOf(ch) != -1); 
+    }
+
+    stringCompare(a : string, b: string) : number {
+        return -1;
+    }
+
+    userCompare(a : Core.User, b : Core.User) : number {
+        return -1;
     }
 
     private events : EventEmitter;

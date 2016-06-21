@@ -1,6 +1,5 @@
 import {IParser} from '../IParser';
 import * as Core from 'dab.irc.core/src';
-import {PrivmsgMessage} from '../MessageTypes/PrivmsgMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 

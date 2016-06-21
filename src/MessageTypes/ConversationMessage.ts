@@ -1,30 +1,22 @@
 import * as Core from 'dab.irc.core/src';
+import {ParserServer} from '../ParserServer';
 
-export class PrivmsgMessage extends Core.Message {
-    get destination() : Core.Target.ITarget {
-        return this._destination;
-    }
-    get wall() : string {
-        return this._wall;
-    }
-    
-    get _ctcp(): boolean {
-        return this._ctcp;
-    }
+export class ConversationMessage extends Core.Message {
+
 
     // Make sure that CHANTYPES has data. A server isn't required to send it by default.
-    // It defaults to value of ["&","#"]
-    constructor(msg : Core.Message, serverAttributes:{[key:string] : string }) {
+    // It defaults to value of ["&","#"]  used to be {[key:string] : string }
+    constructor(msg : Core.Message, server:ParserServer) {
         super(msg.raw);
 
         var dest = msg.tokenized[2];
 
-        while(serverAttributes["STATUSMSG"].indexOf(dest[0]) != -1) {
+        while(server.attributes["STATUSMSG"].indexOf(dest[0]) != -1) {
             this._wall += dest[0];
             dest = dest.substr(1);
         }
 
-        if (serverAttributes["CHANTYPES"].indexOf(dest) != -1) {
+        if (server.isChannel(dest)) {
             this._destination = new Core.Channel(dest);
         }
         else {
@@ -44,5 +36,16 @@ export class PrivmsgMessage extends Core.Message {
 
     private _destination : Core.Target.ITarget = null;
     private _wall : string = "";
-
+    private _ctcp : boolean = false;
+    
+    get destination() : Core.Target.ITarget {
+        return this._destination;
+    }
+    get wall() : string {
+        return this._wall;
+    }
+    
+    get ctcp(): boolean {
+        return this._ctcp;
+    }
 }
