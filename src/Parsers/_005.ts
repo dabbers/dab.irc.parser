@@ -6,7 +6,7 @@ import {DynamicParser} from '../DynamicParser';
 export class Do005 implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
-        console.log("Do005", server);
+
         for(var i = 3; i < message.tokenized.length; i++) {
             var key = "";
             var value = "";
