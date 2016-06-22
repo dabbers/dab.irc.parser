@@ -4,7 +4,6 @@ var Do005 = (function () {
     function Do005() {
     }
     Do005.prototype.parse = function (server, message, callback) {
-        console.log("Do005", server);
         for (var i = 3; i < message.tokenized.length; i++) {
             var key = "";
             var value = "";
