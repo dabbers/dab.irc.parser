@@ -14,9 +14,12 @@ var ParserServer = (function (_super) {
         _super.call(this, host);
         this.attributes = {};
         this.dataReceived = function (data) {
-            _this.parser.parse(_this, data, function (s, m) {
+            var cb = function (s, m) {
                 _this.emit(m.command, _this, m);
-            });
+            };
+            if (!_this.parser.parse(_this, data, cb)) {
+                _this.emit(data.command, _this, data);
+            }
         };
         this.connection = connection;
         this.parser = new DynamicParser_1.DynamicParser();
@@ -56,6 +59,12 @@ var ParserServer = (function (_super) {
     };
     ParserServer.prototype.toString = function () {
         return "[" + this.display + " ParserServer]";
+    };
+    ParserServer.prototype.isChannel = function (ch) {
+        if (!this.attributes["CHANTYPES"]) {
+            this.attributes["CHANTYPES"] = "#&";
+        }
+        return (this.attributes["CHANTYPES"].indexOf(ch[0]) != -1);
     };
     return ParserServer;
 }(Core.BaseServer));

@@ -3,7 +3,6 @@ var fs = require('fs');
 function getParsers() {
     var paths = fs.readdirSync(__dirname);
     var parsers = [];
-    console.log(paths);
     for (var i in paths) {
         if (paths[i].indexOf("index") == 0)
             continue;
@@ -11,6 +10,8 @@ function getParsers() {
             continue;
         var tmp = require(__dirname + "/" + paths[i]);
         tmp = tmp[Object.keys(tmp)[0]];
+        if (!tmp)
+            continue;
         parsers.push(new tmp());
     }
     return parsers;

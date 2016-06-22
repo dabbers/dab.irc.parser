@@ -23,13 +23,28 @@ export class ConversationMessage extends Core.Message {
             this._destination = new Core.User(dest, null, null);
         }
 
-        if (this.firstWord[0] == "\u0001") {
+        if (this.firstWord[0] == "\x01") {
+            // Make CTCP behave more like IRCv3.3 intent. Modify message to appear more v3.3 like.
+            // We remove the actual CTCP verb everywhere except the raw message. 
             this._ctcp = true;
-            this._firstWord = this.firstWord.substr(1);
+            this._messageTags["intent"] = this._firstWord.substr(1);
+            this._firstWord = this.tokenized[4];
+
+            // Remove trailing \x0001
+            var last = this.tokenized.length - 1;
+            var last_tok = this.tokenized[last];
+
+            this._tokenized[last] = last_tok.substr(0,last_tok.length - 1);
+
+            this._message = this.tokenized.slice(4).join(" ");
+
+            this._tokenized[4] = ":" + this.tokenized[4];
+
+            this._tokenized.splice(3, 1);
         }
 
         // TODO: Validate this is the final intent for IRCV3.3
-        if (this.messageTags["intent"].indexOf("action") != -1) {
+        if (this.messageTags["intent"]) {
             this._ctcp = true;
         }
     }

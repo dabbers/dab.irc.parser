@@ -2,6 +2,9 @@ import * as Core from 'dab.irc.core/src';
 
 export class ChannelUserChangeMessage extends Core.Message {
 
+    get destination() : Core.Channel {
+        return this._destination;
+    }
 
     // Make sure that CHANTYPES has data. A server isn't required to send it by default.
     // It defaults to value of ["&","#"]

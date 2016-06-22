@@ -8,7 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node bin\\sample.js",
+    "test": "node bin\\test\\index.js"
   },
   "keywords": [
     "dab",
@@ -20,6 +21,7 @@
   "author": "dab",
   "license": "MIT",
   "dependencies": {
-    "dab.irc.core": "^1.0.0"
+    "dab.irc.core": "^1.0.0",
+    "tsunit.external": "^2.0.1"
   }
 }

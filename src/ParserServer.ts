@@ -72,7 +72,7 @@ export class ParserServer extends Core.BaseServer {
             this.attributes["CHANTYPES"] = "#&";
         }
 
-        return (this.attributes["CHANTYPES"].indexOf(ch) != -1); 
+        return (this.attributes["CHANTYPES"].indexOf(ch[0]) != -1); 
     }
 
     private events : EventEmitter;

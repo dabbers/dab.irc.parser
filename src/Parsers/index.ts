@@ -11,7 +11,8 @@ export function getParsers() : IParser<any>[] {
         var tmp = require( __dirname + "/" + paths[i]);
 
         tmp = tmp[Object.keys(tmp)[0]];
-
+        if (!tmp) continue;
+        
         parsers.push( new tmp ());
     }
 
