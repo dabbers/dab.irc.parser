@@ -20,12 +20,12 @@ class SampleIRCContext implements Core.IConnectionContext {
 
     dataCallback: (d: Core.Message) => any;
     
-    createConnection(cb:() => any): net.Socket | tls.ClearTextStream {
+    createConnection(cb:() => any): Core.ISocket {
         if (this.ssl) {
-            return tls.connect(this.port, this.host, {rejectUnauthorized: this.rejectUnauthedCerts}, cb);
+            return new Core.NodeSocket(tls.connect(this.port, this.host, {rejectUnauthorized: this.rejectUnauthedCerts}, cb));
         }
         else {
-            return net.createConnection(this.port, this.host, cb);            
+            return new Core.NodeSocket(net.createConnection(this.port, this.host, cb));            
         }
     }
 

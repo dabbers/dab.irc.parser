@@ -7,14 +7,14 @@ export class ModeChangeMessage extends Core.Message {
     constructor(msg : Core.Message, server:ParserServer) {
         super(msg.raw);
 
-        var modesstring = msg.tokenized[3];
-        var paramsindex = 4;
-        var adding = true;
-        var isChannel = server.isChannel(msg.tokenized[2]);
+        let modesstring = msg.tokenized[3];
+        let paramsindex = 4;
+        let adding = true;
+        let isChannel = server.isChannel(msg.tokenized[2]);
 
-        var prefixz = server.attributes["PREFIX_PREFIXES"];
-        var start = modesstring[0] == ':' ? 1 : 0;
-        for (var i = start; i < modesstring.length; i++)
+        let prefixz = server.attributes["PREFIX_PREFIXES"];
+        let start = modesstring[0] == ':' ? 1 : 0;
+        for (let i = start; i < modesstring.length; i++)
         {
             if (modesstring[i] == '+')
             {
@@ -27,7 +27,7 @@ export class ModeChangeMessage extends Core.Message {
                 continue;
             }
 
-            var mode = new Core.Mode();
+            let mode = new Core.Mode();
             mode.character = modesstring[i];
             mode.change = adding ? Core.ModeChangeType.Adding : Core.ModeChangeType.Removing;
 

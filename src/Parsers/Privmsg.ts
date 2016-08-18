@@ -14,9 +14,9 @@ export class Privmsg implements IParser<any> {
     // Create a new instance of this module. Initialize and do things as needed
     init(context : any) : void {
         if (context.constructor == DynamicParser) {
-            var ctx = <DynamicParser>context;
-            ctx.parserDictionary["PRIVMSG"] = this;
-            ctx.parserDictionary["NOTICE"] = this;
+            this.ctx = <DynamicParser>context;
+            this.ctx.parserDictionary["PRIVMSG"] = this;
+            this.ctx.parserDictionary["NOTICE"] = this;
             
             return;
         }
@@ -31,6 +31,9 @@ export class Privmsg implements IParser<any> {
 
     // Unloading this module. No state needed for callback.
     uninit() : any {
+        delete this.ctx.parserDictionary["PRIVMSG"];
+        delete this.ctx.parserDictionary["NOTICE"];
         return null;
     }
+    private ctx:DynamicParser;
 }

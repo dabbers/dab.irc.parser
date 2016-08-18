@@ -7,6 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var Core = require('dab.irc.core/src');
 var events_1 = require('events');
 var DynamicParser_1 = require('./DynamicParser');
+var Parsers_1 = require('./Parsers');
 var ParserServer = (function (_super) {
     __extends(ParserServer, _super);
     function ParserServer(host, connection) {
@@ -23,6 +24,10 @@ var ParserServer = (function (_super) {
         };
         this.connection = connection;
         this.parser = new DynamicParser_1.DynamicParser();
+        var names = Parsers_1.getParserNames();
+        for (var i in names) {
+            this.parser.load(names[i]);
+        }
         this.events = new events_1.EventEmitter();
         this.on('PING', function (s, m) {
             s.connection.write("PONG " + m.tokenized[1]);

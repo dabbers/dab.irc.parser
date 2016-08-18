@@ -6,13 +6,13 @@ import {DynamicParser} from '../DynamicParser';
 export class Do005 implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
-
+        
         for(var i = 3; i < message.tokenized.length; i++) {
-            var key = "";
-            var value = "";
+            let key = "";
+            let value = "";
 
             if (message.tokenized[i].indexOf("=") != -1) {
-                var sep = message.tokenized[i].split("=");
+                let sep = message.tokenized[i].split("=");
                 key = sep[0];
                 value = sep[1];
             }
@@ -24,14 +24,14 @@ export class Do005 implements IParser<any> {
         }
 
         if (server.attributes["PREFIX"]) {
-            var tosplit = value.substring(1);
-            var split = tosplit.split(')');
+            let tosplit = server.attributes["PREFIX"].substring(1);
+            let split = tosplit.split(')');
             server.attributes["PREFIX_MODES"] = split[0];
             server.attributes["PREFIX_PREFIXES"] = split[1];
         }
 
         if (server.attributes["CHANMODES"]) {
-            var chanmodes = value.split(',');
+            let chanmodes = server.attributes["CHANMODES"].split(',');
 
             // Mode that adds or removes nick or address to a list
             server.attributes["CHANMODES_A"] = chanmodes[0];
@@ -50,8 +50,8 @@ export class Do005 implements IParser<any> {
     // Create a new instance of this module. Initialize and do things as needed
     init(context : any) : void {
         if (context.constructor == DynamicParser) {
-            var ctx = <DynamicParser>context;
-            ctx.parserDictionary["005"] = this;
+            this.ctx = <DynamicParser>context;
+            this.ctx.parserDictionary["005"] = this;
 
             return;
         }
@@ -67,6 +67,8 @@ export class Do005 implements IParser<any> {
 
     // Unloading this module. No state needed for callback.
     uninit() : any {
+        delete this.ctx.parserDictionary["005"];
         return null;
     }
+    private ctx:DynamicParser;
 }

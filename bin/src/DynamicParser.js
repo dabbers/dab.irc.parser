@@ -1,19 +1,31 @@
 "use strict";
-var Parsers_1 = require('./Parsers');
 var DynamicParser = (function () {
     function DynamicParser() {
         this.parserDictionary = {};
         this.parsers = [];
-        this.parsers = Parsers_1.getParsers();
-        for (var i in this.parsers) {
-            this.parsers[i].init(this);
-        }
     }
     DynamicParser.prototype.parse = function (server, message, callback) {
         if (this.parserDictionary[message.command]) {
             return this.parserDictionary[message.command].parse(server, message, callback);
         }
         return false;
+    };
+    DynamicParser.prototype.load = function (name) {
+        var fullPath = __dirname + "\\Parsers\\" + name;
+        if (require.cache[fullPath + ".js"])
+            delete require.cache[fullPath + ".js"];
+        var obj = require(fullPath);
+        var indx = Object.keys(obj)[0];
+        var fnc = obj[indx];
+        if (!fnc)
+            throw "Could not load module: " + name;
+        var inst = new fnc();
+        inst.init(this);
+        this.parsers.push(inst);
+        return this;
+    };
+    DynamicParser.prototype.unload = function (name, persist) {
+        return this;
     };
     DynamicParser.prototype.init = function (context) {
     };

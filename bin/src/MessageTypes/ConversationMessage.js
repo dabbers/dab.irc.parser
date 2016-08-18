@@ -13,7 +13,7 @@ var ConversationMessage = (function (_super) {
         this._wall = "";
         this._ctcp = false;
         var dest = msg.tokenized[2];
-        while (server.attributes["STATUSMSG"].indexOf(dest[0]) != -1) {
+        while (server.attributes["STATUSMSG"] && server.attributes["STATUSMSG"].indexOf(dest[0]) != -1) {
             this._wall += dest[0];
             dest = dest.substr(1);
         }
@@ -26,11 +26,11 @@ var ConversationMessage = (function (_super) {
         if (this.firstWord[0] == "\x01") {
             this._ctcp = true;
             this._messageTags["intent"] = this._firstWord.substr(1);
-            this._firstWord = this.tokenized[4];
             var last = this.tokenized.length - 1;
             var last_tok = this.tokenized[last];
             this._tokenized[last] = last_tok.substr(0, last_tok.length - 1);
             this._message = this.tokenized.slice(4).join(" ");
+            this._firstWord = this.tokenized[4];
             this._tokenized[4] = ":" + this.tokenized[4];
             this._tokenized.splice(3, 1);
         }

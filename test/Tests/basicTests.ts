@@ -11,14 +11,14 @@ export class BasicTests extends tsUnit.TestClass {
     }
 
     privmsgTest() {
-        var m = new Parser.ConversationMessage(new Core.Message(":nick!ident@host PRIVMSG #channel :Hello world"), this.servr);
+        let m = new Parser.ConversationMessage(new Core.Message(":nick!ident@host PRIVMSG #channel :Hello world"), this.servr);
 
         this.areIdentical("#channel", m.destination.target);
         this.isTrue(m.destination instanceof Core.Channel, "Not instance of Channel");
     }
 
     privmsgWallTest() {
-        var m = new Parser.ConversationMessage(new Core.Message(":nick!ident@host PRIVMSG +#channel :Hello world"), this.servr);
+        let m = new Parser.ConversationMessage(new Core.Message(":nick!ident@host PRIVMSG +#channel :Hello world"), this.servr);
 
         this.areIdentical("#channel", m.destination.target);
         this.isTrue(m.destination instanceof Core.Channel, "Not instance of Channel");
@@ -27,7 +27,7 @@ export class BasicTests extends tsUnit.TestClass {
     }
 
     noticeWallTest() {
-        var m = new Parser.ConversationMessage(new Core.Message(":nick!ident@host NOTICE +#channel :Hello world"), this.servr);
+        let m = new Parser.ConversationMessage(new Core.Message(":nick!ident@host NOTICE +#channel :Hello world"), this.servr);
 
         this.areIdentical("#channel", m.destination.target);
         this.isTrue(m.destination instanceof Core.Channel, "Not instance of Channel");
@@ -36,7 +36,7 @@ export class BasicTests extends tsUnit.TestClass {
     }
 
     privmsgMessageActionTest() {
-        var m = new Parser.ConversationMessage(new Core.Message(":nick!ident@host NOTICE +#channel :" + "\x01" + "ACTION Hello world" + "\x01"), this.servr);
+        let m = new Parser.ConversationMessage(new Core.Message(":nick!ident@host NOTICE +#channel :" + "\x01" + "ACTION Hello world" + "\x01"), this.servr);
 
         this.areIdentical("#channel", m.destination.target);
         this.isTrue(m.destination instanceof Core.Channel, "Not instance of Channel");
@@ -52,7 +52,7 @@ export class BasicTests extends tsUnit.TestClass {
     }
 
     privmsgMessageIntentActionTest() {
-        var m = new Parser.ConversationMessage(new Core.Message("@intent=ACTION :nick!ident@host NOTICE +#channel :Hello world"), this.servr);
+        let m = new Parser.ConversationMessage(new Core.Message("@intent=ACTION :nick!ident@host NOTICE +#channel :Hello world"), this.servr);
 
         this.areIdentical("#channel", m.destination.target);
         this.isTrue(m.destination instanceof Core.Channel, "Not instance of Channel");

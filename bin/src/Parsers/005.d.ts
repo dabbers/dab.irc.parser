@@ -6,4 +6,5 @@ export declare class Do005 implements IParser<any> {
     init(context: any): void;
     resume(state: any): void;
     uninit(): any;
+    private ctx;
 }

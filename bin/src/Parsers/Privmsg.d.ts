@@ -6,4 +6,5 @@ export declare class Privmsg implements IParser<any> {
     init(context: any): void;
     resume(state: any): void;
     uninit(): any;
+    private ctx;
 }

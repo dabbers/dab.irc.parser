@@ -2,6 +2,7 @@ import * as Core from 'dab.irc.core/src';
 import {Message} from 'dab.irc.core/src/Message';
 import {EventEmitter} from 'events';
 import {DynamicParser} from './DynamicParser';
+import {getParserNames} from './Parsers';
 
 export class ParserServer extends Core.BaseServer {
     attributes: {[key:string] : string } = {};
@@ -13,6 +14,11 @@ export class ParserServer extends Core.BaseServer {
 
         this.connection = connection;
         this.parser = new DynamicParser();
+        let names = getParserNames();
+        for(let i in names) {
+            this.parser.load(names[i]);
+        }
+
         this.events = new EventEmitter();
 
         this.on('PING', (s:ParserServer, m:Core.Message) => {
@@ -21,7 +27,7 @@ export class ParserServer extends Core.BaseServer {
     }
 
     dataReceived = (data: Core.Message) => {
-        var cb = (s : ParserServer, m: Core.Message) => {
+        let cb = (s : ParserServer, m: Core.Message) => {
             this.emit(m.command, this, m);
         };
 

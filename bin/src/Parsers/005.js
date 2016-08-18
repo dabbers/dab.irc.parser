@@ -18,13 +18,13 @@ var Do005 = (function () {
             server.attributes[key] = value;
         }
         if (server.attributes["PREFIX"]) {
-            var tosplit = value.substring(1);
+            var tosplit = server.attributes["PREFIX"].substring(1);
             var split = tosplit.split(')');
             server.attributes["PREFIX_MODES"] = split[0];
             server.attributes["PREFIX_PREFIXES"] = split[1];
         }
         if (server.attributes["CHANMODES"]) {
-            var chanmodes = value.split(',');
+            var chanmodes = server.attributes["CHANMODES"].split(',');
             server.attributes["CHANMODES_A"] = chanmodes[0];
             server.attributes["CHANMODES_B"] = chanmodes[1];
             server.attributes["CHANMODES_C"] = chanmodes[2];
@@ -34,8 +34,8 @@ var Do005 = (function () {
     };
     Do005.prototype.init = function (context) {
         if (context.constructor == DynamicParser_1.DynamicParser) {
-            var ctx = context;
-            ctx.parserDictionary["005"] = this;
+            this.ctx = context;
+            this.ctx.parserDictionary["005"] = this;
             return;
         }
         throw "Invalid context passed to 005 parser";
@@ -43,6 +43,7 @@ var Do005 = (function () {
     Do005.prototype.resume = function (state) {
     };
     Do005.prototype.uninit = function () {
+        delete this.ctx.parserDictionary["005"];
         return null;
     };
     return Do005;

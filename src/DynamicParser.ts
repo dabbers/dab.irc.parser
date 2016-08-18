@@ -3,15 +3,10 @@ import {getParsers} from './Parsers';
 import {IParser} from './IParser';
 import {ParserServer} from './ParserServer';
 
-export class DynamicParser implements IParser<any> {
+export class DynamicParser implements IParser<any>, Core.IModuleHandler<DynamicParser> {
     parserDictionary : {[key:string] : IParser<any>} = {};
 
     constructor() {
-
-        this.parsers = getParsers();
-        for(var i in this.parsers) {
-            this.parsers[i].init(this);
-        }
     }
 
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
@@ -22,6 +17,30 @@ export class DynamicParser implements IParser<any> {
         return false;
     }
 
+    load(name: string) : Core.IModuleHandler<DynamicParser> {
+
+        let fullPath = __dirname + "\\Parsers\\" + name;
+        if (require.cache[fullPath + ".js"]) delete require.cache[fullPath + ".js"];
+        let obj = require(fullPath);
+        let indx = Object.keys(obj)[0]; // the obj will have obj.FunctionName since we export classes in the modules.
+
+        let fnc = obj[indx];
+
+        if (!fnc) throw "Could not load module: " + name;
+
+        let inst: IParser<any> = new fnc();
+
+        inst.init(this);
+        
+        this.parsers.push( inst );
+
+        return this;
+    }
+
+    unload(name: string, persist: boolean) : Core.IModuleHandler<DynamicParser> {
+
+        return this;
+    }
     // Create a new instance of this module. Initialize and do things as needed
     init(context : any) : void {
 

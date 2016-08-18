@@ -4,7 +4,7 @@ import {ChannelUserChangeMessage} from '../MessageTypes/ChannelUserChangeMessage
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 
-export class Part implements IParser<any> {
+export class ChannelUserChange implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
         callback(server, new ChannelUserChangeMessage(message));
@@ -13,15 +13,17 @@ export class Part implements IParser<any> {
 
     // Create a new instance of this module. Initialize and do things as needed
     init(context : any) : void {
+
         if (context.constructor == DynamicParser) {
-            var ctx = <DynamicParser>context;
-            ctx.parserDictionary["PART"] = this;
+            this.ctx = <DynamicParser>context;
+            this.ctx.parserDictionary["JOIN"] = this;
+            this.ctx.parserDictionary["PART"] = this;
             
             return;
         }
 
         // Todo: make this more classy
-        throw "Invalid context passed to PART parser";
+        throw "Invalid context passed to ChannelUserChange parser";
     }
 
     // We are resuming. No state required for a parser
@@ -30,6 +32,9 @@ export class Part implements IParser<any> {
 
     // Unloading this module. No state needed for callback.
     uninit() : any {
+        delete this.ctx.parserDictionary["JOIN"];
+        delete this.ctx.parserDictionary["PART"];
         return null;
     }
+    private ctx:DynamicParser;
 }
