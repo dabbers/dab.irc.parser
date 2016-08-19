@@ -1,6 +1,7 @@
 "use strict";
 var ModeChangeMessage_1 = require('../MessageTypes/ModeChangeMessage');
 var DynamicParser_1 = require('../DynamicParser');
+var EventList_1 = require('../EventList');
 var Privmsg = (function () {
     function Privmsg() {
     }
@@ -13,14 +14,15 @@ var Privmsg = (function () {
         return true;
     };
     Privmsg.prototype.init = function (context) {
-        if (context.constructor == DynamicParser_1.DynamicParser) {
+        if (context instanceof DynamicParser_1.DynamicParser) {
             this.ctx = context;
-            this.ctx.parserDictionary["MODE"] = this;
+            this.ctx.parserDictionary[EventList_1.Events.MODE] = this;
             return;
         }
         throw "Invalid context passed to PRIVMSG parser";
     };
     Privmsg.prototype.resume = function (state) {
+        throw "Don't resume a parser. Please call init";
     };
     Privmsg.prototype.uninit = function () {
         delete this.ctx.parserDictionary["MODE"];

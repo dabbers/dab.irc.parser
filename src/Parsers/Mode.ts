@@ -3,6 +3,7 @@ import * as Core from 'dab.irc.core/src';
 import {ModeChangeMessage} from '../MessageTypes/ModeChangeMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
+import {Events} from '../EventList';
 
 export class Privmsg implements IParser<any> {
     
@@ -20,9 +21,9 @@ export class Privmsg implements IParser<any> {
 
     // Create a new instance of this module. Initialize and do things as needed
     init(context : any) : void {
-        if (context.constructor == DynamicParser) {
+        if (context instanceof DynamicParser) {
             this.ctx = <DynamicParser>context;
-            this.ctx.parserDictionary["MODE"] = this;
+            this.ctx.parserDictionary[Events.MODE] = this;
             
             return;
         }
@@ -33,6 +34,7 @@ export class Privmsg implements IParser<any> {
 
     // We are resuming. No state required for a parser
     resume(state : any) : void {
+        throw "Don't resume a parser. Please call init";
     }
 
     // Unloading this module. No state needed for callback.

@@ -2,6 +2,7 @@ import * as Core from 'dab.irc.core/src';
 import {getParsers} from './Parsers';
 import {IParser} from './IParser';
 import {ParserServer} from './ParserServer';
+import * as path from 'path';
 
 export class DynamicParser implements IParser<any>, Core.IModuleHandler<DynamicParser> {
     parserDictionary : {[key:string] : IParser<any>} = {};
@@ -19,7 +20,7 @@ export class DynamicParser implements IParser<any>, Core.IModuleHandler<DynamicP
 
     load(name: string) : Core.IModuleHandler<DynamicParser> {
 
-        let fullPath = __dirname + "\\Parsers\\" + name;
+        let fullPath = path.join(__dirname, "Parsers", name);
         if (require.cache[fullPath + ".js"]) delete require.cache[fullPath + ".js"];
         let obj = require(fullPath);
         let indx = Object.keys(obj)[0]; // the obj will have obj.FunctionName since we export classes in the modules.
@@ -32,12 +33,14 @@ export class DynamicParser implements IParser<any>, Core.IModuleHandler<DynamicP
 
         inst.init(this);
         
-        this.parsers.push( inst );
+        this.parsers[name] = inst;
 
         return this;
     }
 
     unload(name: string, persist: boolean) : Core.IModuleHandler<DynamicParser> {
+        this.parsers[name].uninit();
+        delete this.parsers[name];
 
         return this;
     }
@@ -56,5 +59,5 @@ export class DynamicParser implements IParser<any>, Core.IModuleHandler<DynamicP
         return null;
     }
 
-    private parsers : IParser<any>[] = [];
+    private parsers : {[key:string] : IParser<any>} = {};
 }

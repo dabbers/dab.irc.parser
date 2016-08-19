@@ -2,6 +2,7 @@ import {IParser} from '../IParser';
 import * as Core from 'dab.irc.core/src';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
+import {Numerics} from '../EventList';
 
 export class Do005 implements IParser<any> {
     
@@ -49,9 +50,9 @@ export class Do005 implements IParser<any> {
 
     // Create a new instance of this module. Initialize and do things as needed
     init(context : any) : void {
-        if (context.constructor == DynamicParser) {
+        if (context instanceof DynamicParser) {
             this.ctx = <DynamicParser>context;
-            this.ctx.parserDictionary["005"] = this;
+            this.ctx.parserDictionary[Numerics.ISUPPORT] = this;
 
             return;
         }
@@ -62,7 +63,7 @@ export class Do005 implements IParser<any> {
 
     // We are resuming. No state required for a parser
     resume(state : any) : void {
-
+        throw "Don't resume a parser. Please call init";
     }
 
     // Unloading this module. No state needed for callback.

@@ -9,7 +9,7 @@ var Privmsg = (function () {
         return true;
     };
     Privmsg.prototype.init = function (context) {
-        if (context.constructor == DynamicParser_1.DynamicParser) {
+        if (context instanceof DynamicParser_1.DynamicParser) {
             this.ctx = context;
             this.ctx.parserDictionary["PRIVMSG"] = this;
             this.ctx.parserDictionary["NOTICE"] = this;
@@ -18,6 +18,7 @@ var Privmsg = (function () {
         throw "Invalid context passed to NOTICE/PRIVMSG parser";
     };
     Privmsg.prototype.resume = function (state) {
+        throw "Don't resume a parser. Please call init";
     };
     Privmsg.prototype.uninit = function () {
         delete this.ctx.parserDictionary["PRIVMSG"];

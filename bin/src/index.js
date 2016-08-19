@@ -6,3 +6,4 @@ __export(require('./DynamicParser'));
 __export(require('./ParserServer'));
 __export(require('./Parsers'));
 __export(require('./MessageTypes'));
+__export(require('./EventList'));

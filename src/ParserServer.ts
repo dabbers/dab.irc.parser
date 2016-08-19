@@ -3,7 +3,7 @@ import {Message} from 'dab.irc.core/src/Message';
 import {EventEmitter} from 'events';
 import {DynamicParser} from './DynamicParser';
 import {getParserNames} from './Parsers';
-
+import * as EventList from './EventList';
 export class ParserServer extends Core.BaseServer {
     attributes: {[key:string] : string } = {};
 
@@ -21,7 +21,10 @@ export class ParserServer extends Core.BaseServer {
 
         this.events = new EventEmitter();
 
-        this.on('PING', (s:ParserServer, m:Core.Message) => {
+        this.on(EventList.Events.PING, (s:ParserServer, m:Core.Message) => {
+            // We could leave this to the context implementation to do, but 
+            // in the instnace of a bot with a message queue, we'd want to send PONG
+            // responses asap to prevent a timeout.
             s.connection.write("PONG " + m.tokenized[1]);
         });
     }
@@ -32,6 +35,8 @@ export class ParserServer extends Core.BaseServer {
         };
 
         if (!this.parser.parse(this, data, cb)) {
+            let cmd = data.command;
+            
             this.emit(data.command, this, data);   
         }
     }

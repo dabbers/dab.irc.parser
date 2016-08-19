@@ -1,5 +1,6 @@
 "use strict";
 var DynamicParser_1 = require('../DynamicParser');
+var EventList_1 = require('../EventList');
 var Do005 = (function () {
     function Do005() {
     }
@@ -33,14 +34,15 @@ var Do005 = (function () {
         return false;
     };
     Do005.prototype.init = function (context) {
-        if (context.constructor == DynamicParser_1.DynamicParser) {
+        if (context instanceof DynamicParser_1.DynamicParser) {
             this.ctx = context;
-            this.ctx.parserDictionary["005"] = this;
+            this.ctx.parserDictionary[EventList_1.Numerics.ISUPPORT] = this;
             return;
         }
         throw "Invalid context passed to 005 parser";
     };
     Do005.prototype.resume = function (state) {
+        throw "Don't resume a parser. Please call init";
     };
     Do005.prototype.uninit = function () {
         delete this.ctx.parserDictionary["005"];

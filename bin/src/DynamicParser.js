@@ -1,8 +1,9 @@
 "use strict";
+var path = require('path');
 var DynamicParser = (function () {
     function DynamicParser() {
         this.parserDictionary = {};
-        this.parsers = [];
+        this.parsers = {};
     }
     DynamicParser.prototype.parse = function (server, message, callback) {
         if (this.parserDictionary[message.command]) {
@@ -11,7 +12,7 @@ var DynamicParser = (function () {
         return false;
     };
     DynamicParser.prototype.load = function (name) {
-        var fullPath = __dirname + "\\Parsers\\" + name;
+        var fullPath = path.join(__dirname, "Parsers", name);
         if (require.cache[fullPath + ".js"])
             delete require.cache[fullPath + ".js"];
         var obj = require(fullPath);
@@ -21,10 +22,12 @@ var DynamicParser = (function () {
             throw "Could not load module: " + name;
         var inst = new fnc();
         inst.init(this);
-        this.parsers.push(inst);
+        this.parsers[name] = inst;
         return this;
     };
     DynamicParser.prototype.unload = function (name, persist) {
+        this.parsers[name].uninit();
+        delete this.parsers[name];
         return this;
     };
     DynamicParser.prototype.init = function (context) {

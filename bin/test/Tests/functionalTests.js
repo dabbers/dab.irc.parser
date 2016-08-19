@@ -96,31 +96,31 @@ var FunctionalTests = (function (_super) {
         var ctx = new SampleIRCContext();
         var connection = new Core.Connection();
         var svr = new Parser.ParserServer("", connection);
-        svr.on("NOTICE", function (s, m) {
+        svr.on(Parser.Events.NOTICE, function (s, m) {
             var msg = m;
             _this.areIdentical("AUTH", msg.destination.display, "Destination should be AUTH");
             _this.endToEnd_NoticeAuth = true;
         });
-        svr.on("005", function (s, m) {
+        svr.on(Parser.Numerics.ISUPPORT, function (s, m) {
             _this.isTrue(Object.keys(svr.attributes).length > 0);
             _this.endToEnd_005 = true;
         });
-        svr.on("004", function (s, m) {
+        svr.on(Parser.Numerics.MYINFO, function (s, m) {
             _this.endToEnd_004 = true;
         });
-        svr.on("003", function (s, m) {
+        svr.on(Parser.Numerics.CREATED, function (s, m) {
             _this.endToEnd_003 = true;
         });
-        svr.on("002", function (s, m) {
+        svr.on(Parser.Numerics.YOURHOST, function (s, m) {
             _this.endToEnd_002 = true;
         });
-        svr.on("001", function (s, m) {
+        svr.on(Parser.Numerics.WELCOME, function (s, m) {
             _this.endToEnd_001 = true;
         });
-        svr.on("372", function (s, m) {
+        svr.on(Parser.Numerics.MOTD, function (s, m) {
             _this.endToEnd_Motd = true;
         });
-        svr.on("MODE", function (s, m) {
+        svr.on(Parser.Events.MODE, function (s, m) {
             var msg = m;
             if (msg.target instanceof Core.User) {
                 _this.areIdentical("i", msg.modes[0].character);
@@ -148,7 +148,7 @@ var FunctionalTests = (function (_super) {
                 }
             }
         });
-        svr.on("PRIVMSG", function (s, m) {
+        svr.on(Parser.Events.PRIVMSG, function (s, m) {
             var msg = m;
             if (msg.messageTags["intent"] == "ACTION") {
                 _this.areIdentical("tests", msg.message);
@@ -164,17 +164,14 @@ var FunctionalTests = (function (_super) {
                 _this.endToEnd_PRIVMSG_Chan = true;
             }
         });
-        svr.on("372", function (s, m) {
-            _this.endToEnd_Motd = true;
-        });
-        svr.on("JOIN", function (s, m) {
+        svr.on(Parser.Events.JOIN, function (s, m) {
             var msg = m;
             _this.areIdentical("JOIN", msg.command);
             _this.areIdentical("dabirc!baditp@127.0.0.0", msg.from.display);
             _this.areIdentical("#test", msg.destination.display);
             _this.endToEnd_Join = true;
         });
-        svr.on("PART", function (s, m) {
+        svr.on(Parser.Events.PART, function (s, m) {
             var msg = m;
             _this.areIdentical("PART", msg.command);
             _this.areIdentical("dabirc!baditp@127.0.0.0", msg.from.display);

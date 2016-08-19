@@ -8,6 +8,7 @@ var Core = require('dab.irc.core/src');
 var events_1 = require('events');
 var DynamicParser_1 = require('./DynamicParser');
 var Parsers_1 = require('./Parsers');
+var EventList = require('./EventList');
 var ParserServer = (function (_super) {
     __extends(ParserServer, _super);
     function ParserServer(host, connection) {
@@ -19,6 +20,7 @@ var ParserServer = (function (_super) {
                 _this.emit(m.command, _this, m);
             };
             if (!_this.parser.parse(_this, data, cb)) {
+                var cmd = data.command;
                 _this.emit(data.command, _this, data);
             }
         };
@@ -29,7 +31,7 @@ var ParserServer = (function (_super) {
             this.parser.load(names[i]);
         }
         this.events = new events_1.EventEmitter();
-        this.on('PING', function (s, m) {
+        this.on(EventList.Events.PING, function (s, m) {
             s.connection.write("PONG " + m.tokenized[1]);
         });
     }

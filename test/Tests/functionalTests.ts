@@ -128,31 +128,31 @@ export class FunctionalTests extends tsUnit.TestClass {
         let connection = new Core.Connection();
         let svr = new Parser.ParserServer("", connection);
 
-        svr.on("NOTICE", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Events.NOTICE, (s:Parser.ParserServer, m:Core.Message) => {
             let msg = <Parser.ConversationMessage>m;
             this.areIdentical("AUTH", msg.destination.display, "Destination should be AUTH");
             this.endToEnd_NoticeAuth = true; 
         });
-        svr.on("005", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Numerics.ISUPPORT, (s:Parser.ParserServer, m:Core.Message) => {
             this.isTrue(Object.keys(svr.attributes).length > 0);
             this.endToEnd_005 = true;
         });
-        svr.on("004", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Numerics.MYINFO, (s:Parser.ParserServer, m:Core.Message) => {
             this.endToEnd_004 = true;
         });
-        svr.on("003", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Numerics.CREATED, (s:Parser.ParserServer, m:Core.Message) => {
             this.endToEnd_003 = true;
         });
-        svr.on("002", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Numerics.YOURHOST, (s:Parser.ParserServer, m:Core.Message) => {
             this.endToEnd_002 = true;
         });
-        svr.on("001", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Numerics.WELCOME, (s:Parser.ParserServer, m:Core.Message) => {
             this.endToEnd_001 = true;
         });
-        svr.on("372", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Numerics.MOTD, (s:Parser.ParserServer, m:Core.Message) => {
             this.endToEnd_Motd = true;
         });
-        svr.on("MODE", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Events.MODE, (s:Parser.ParserServer, m:Core.Message) => {
             let msg = <Parser.ModeChangeMessage>m;
 
             if (msg.target instanceof Core.User) {
@@ -182,7 +182,7 @@ export class FunctionalTests extends tsUnit.TestClass {
                 }
             }
         });
-        svr.on("PRIVMSG", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Events.PRIVMSG, (s:Parser.ParserServer, m:Core.Message) => {
             let msg = <Parser.ConversationMessage>m;
             
             if (msg.messageTags["intent"] == "ACTION") {
@@ -199,17 +199,14 @@ export class FunctionalTests extends tsUnit.TestClass {
                 this.endToEnd_PRIVMSG_Chan = true;
             }
         });
-        svr.on("372", (s:Parser.ParserServer, m:Core.Message) => {
-            this.endToEnd_Motd = true;
-        });
-        svr.on("JOIN", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Events.JOIN, (s:Parser.ParserServer, m:Core.Message) => {
             let msg = <Parser.ChannelUserChangeMessage>m;
             this.areIdentical("JOIN", msg.command);
             this.areIdentical("dabirc!baditp@127.0.0.0", msg.from.display);
             this.areIdentical("#test", msg.destination.display);
             this.endToEnd_Join = true;
         });
-        svr.on("PART", (s:Parser.ParserServer, m:Core.Message) => {
+        svr.on(Parser.Events.PART, (s:Parser.ParserServer, m:Core.Message) => {
             let msg = <Parser.ChannelUserChangeMessage>m;
             this.areIdentical("PART", msg.command);
             this.areIdentical("dabirc!baditp@127.0.0.0", msg.from.display);
