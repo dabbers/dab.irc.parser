@@ -7,7 +7,9 @@ export class ConversationMessage extends Core.Message {
     // Make sure that CHANTYPES has data. A server isn't required to send it by default.
     // It defaults to value of ["&","#"]  used to be {[key:string] : string }
     constructor(msg : Core.Message, server:ParserServer) {
-        super(msg.raw);
+        super(msg);
+
+        if (msg.command != "PRIVMSG" && msg.command != "NOTICE") throw new Error("Invalid message to parse, " + msg.command);
 
         let dest = msg.tokenized[2];
 

@@ -8,10 +8,12 @@ var Core = require('dab.irc.core/src');
 var ConversationMessage = (function (_super) {
     __extends(ConversationMessage, _super);
     function ConversationMessage(msg, server) {
-        _super.call(this, msg.raw);
+        _super.call(this, msg);
         this._destination = null;
         this._wall = "";
         this._ctcp = false;
+        if (msg.command != "PRIVMSG" && msg.command != "NOTICE")
+            throw new Error("Invalid message to parse, " + msg.command);
         var dest = msg.tokenized[2];
         while (server.attributes["STATUSMSG"] && server.attributes["STATUSMSG"].indexOf(dest[0]) != -1) {
             this._wall += dest[0];

@@ -9,14 +9,17 @@ export class ParserServer extends Core.BaseServer {
 
     connection: Core.Connection;
 
-    constructor(host: string, connection: Core.Connection) {
+    get parser() : DynamicParser {
+        return this._parser;
+    }
+    constructor(host: string, connection: Core.Connection, parser:DynamicParser = new DynamicParser()) {
         super(host);
 
         this.connection = connection;
-        this.parser = new DynamicParser();
+        this._parser = parser;
         let names = getParserNames();
         for(let i in names) {
-            this.parser.load(names[i]);
+            this._parser.load(names[i]);
         }
 
         this.events = new EventEmitter();
@@ -34,7 +37,7 @@ export class ParserServer extends Core.BaseServer {
             this.emit(m.command, this, m);
         };
 
-        if (!this.parser.parse(this, data, cb)) {
+        if (!this._parser.parse(this, data, cb)) {
             let cmd = data.command;
             
             this.emit(data.command, this, data);   
@@ -87,5 +90,5 @@ export class ParserServer extends Core.BaseServer {
     }
 
     private events : EventEmitter;
-    private parser : DynamicParser;
+    private _parser : DynamicParser;
 }

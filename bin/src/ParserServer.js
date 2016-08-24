@@ -11,30 +11,38 @@ var Parsers_1 = require('./Parsers');
 var EventList = require('./EventList');
 var ParserServer = (function (_super) {
     __extends(ParserServer, _super);
-    function ParserServer(host, connection) {
+    function ParserServer(host, connection, parser) {
         var _this = this;
+        if (parser === void 0) { parser = new DynamicParser_1.DynamicParser(); }
         _super.call(this, host);
         this.attributes = {};
         this.dataReceived = function (data) {
             var cb = function (s, m) {
                 _this.emit(m.command, _this, m);
             };
-            if (!_this.parser.parse(_this, data, cb)) {
+            if (!_this._parser.parse(_this, data, cb)) {
                 var cmd = data.command;
                 _this.emit(data.command, _this, data);
             }
         };
         this.connection = connection;
-        this.parser = new DynamicParser_1.DynamicParser();
+        this._parser = parser;
         var names = Parsers_1.getParserNames();
         for (var i in names) {
-            this.parser.load(names[i]);
+            this._parser.load(names[i]);
         }
         this.events = new events_1.EventEmitter();
         this.on(EventList.Events.PING, function (s, m) {
             s.connection.write("PONG " + m.tokenized[1]);
         });
     }
+    Object.defineProperty(ParserServer.prototype, "parser", {
+        get: function () {
+            return this._parser;
+        },
+        enumerable: true,
+        configurable: true
+    });
     ParserServer.prototype.on = function (event, listener) {
         this.events.on(event, listener);
     };

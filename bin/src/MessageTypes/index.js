@@ -5,3 +5,4 @@ function __export(m) {
 __export(require('./ChannelUserChangeMessage'));
 __export(require('./ConversationMessage'));
 __export(require('./ModeChangeMessage'));
+__export(require('./NickChangeMessage'));

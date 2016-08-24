@@ -7,4 +7,11 @@ export declare class BasicTests extends tsUnit.TestClass {
     noticeWallTest(): void;
     privmsgMessageActionTest(): void;
     privmsgMessageIntentActionTest(): void;
+    nickMessageTest(): void;
+    modeMessageTest(): void;
+    channelUserChangeTest(): void;
+    dynamicParserLoadUnloadTest(): void;
+    dynamicParserLoadReloadTest(): void;
+    dynamicParserUnloadNonLoaded(): void;
+    dynamicParserLoadInvalidFiles(): void;
 }

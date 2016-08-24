@@ -29,17 +29,17 @@ export class Privmsg implements IParser<any> {
         }
 
         // Todo: make this more classy
-        throw "Invalid context passed to PRIVMSG parser";
+        throw new Error("Invalid context passed to PRIVMSG parser");
     }
 
     // We are resuming. No state required for a parser
     resume(state : any) : void {
-        throw "Don't resume a parser. Please call init";
+        throw new Error("Don't resume a parser. Please call init");
     }
 
     // Unloading this module. No state needed for callback.
     uninit() : any {
-        delete this.ctx.parserDictionary["MODE"];
+        delete this.ctx.parserDictionary[Events.MODE];
         return null;
     }
     private ctx:DynamicParser;

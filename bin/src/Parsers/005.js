@@ -8,6 +8,8 @@ var Do005 = (function () {
         for (var i = 3; i < message.tokenized.length; i++) {
             var key = "";
             var value = "";
+            if (message.tokenized[i] == ":are")
+                break;
             if (message.tokenized[i].indexOf("=") != -1) {
                 var sep = message.tokenized[i].split("=");
                 key = sep[0];
@@ -39,13 +41,13 @@ var Do005 = (function () {
             this.ctx.parserDictionary[EventList_1.Numerics.ISUPPORT] = this;
             return;
         }
-        throw "Invalid context passed to 005 parser";
+        throw new Error("Invalid context passed to 005 parser");
     };
     Do005.prototype.resume = function (state) {
-        throw "Don't resume a parser. Please call init";
+        throw new Error("Don't resume a parser. Please call init");
     };
     Do005.prototype.uninit = function () {
-        delete this.ctx.parserDictionary["005"];
+        delete this.ctx.parserDictionary[EventList_1.Numerics.ISUPPORT];
         return null;
     };
     return Do005;

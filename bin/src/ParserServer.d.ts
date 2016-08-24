@@ -1,12 +1,13 @@
 import * as Core from 'dab.irc.core/src';
-import { Message } from 'dab.irc.core/src/Message';
+import { DynamicParser } from './DynamicParser';
 export declare class ParserServer extends Core.BaseServer {
     attributes: {
         [key: string]: string;
     };
     connection: Core.Connection;
-    constructor(host: string, connection: Core.Connection);
-    dataReceived: (data: Message) => void;
+    parser: DynamicParser;
+    constructor(host: string, connection: Core.Connection, parser?: DynamicParser);
+    dataReceived: (data: any) => void;
     on(event: string, listener: Function): void;
     once(event: string, listener: Function): void;
     emit(event: string, ...args: any[]): void;
@@ -18,5 +19,5 @@ export declare class ParserServer extends Core.BaseServer {
     toString(): string;
     isChannel(ch: string): boolean;
     private events;
-    private parser;
+    private _parser;
 }

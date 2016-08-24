@@ -5,22 +5,21 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Core = require('dab.irc.core/src');
-var ChannelUserChangeMessage = (function (_super) {
-    __extends(ChannelUserChangeMessage, _super);
-    function ChannelUserChangeMessage(msg) {
+var NickChangeMessage = (function (_super) {
+    __extends(NickChangeMessage, _super);
+    function NickChangeMessage(msg) {
         _super.call(this, msg);
-        this._destination = null;
-        if (msg.command != "JOIN" && msg.command != "PART")
+        if (msg.command != "NICK")
             throw new Error("Invalid message to parse, " + msg.command);
-        this._destination = new Core.Channel(msg.tokenized[2]);
+        this._to = new Core.User((this._tokenized[2][0] == ':' ? this._tokenized[2].substr(1) : this._tokenized[2]), null, null);
     }
-    Object.defineProperty(ChannelUserChangeMessage.prototype, "destination", {
+    Object.defineProperty(NickChangeMessage.prototype, "destination", {
         get: function () {
-            return this._destination;
+            return this._to;
         },
         enumerable: true,
         configurable: true
     });
-    return ChannelUserChangeMessage;
+    return NickChangeMessage;
 }(Core.Message));
-exports.ChannelUserChangeMessage = ChannelUserChangeMessage;
+exports.NickChangeMessage = NickChangeMessage;

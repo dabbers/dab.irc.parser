@@ -19,17 +19,23 @@ export class DynamicParser implements IParser<any>, Core.IModuleHandler<DynamicP
     }
 
     load(name: string) : Core.IModuleHandler<DynamicParser> {
+        name = name.replace(".js", "").replace(".", "");
 
         let fullPath = path.join(__dirname, "Parsers", name);
+        
         if (require.cache[fullPath + ".js"]) delete require.cache[fullPath + ".js"];
+        if (this.parsers[name]) this.unload(name, false);
+
         let obj = require(fullPath);
         let indx = Object.keys(obj)[0]; // the obj will have obj.FunctionName since we export classes in the modules.
 
         let fnc = obj[indx];
 
-        if (!fnc) throw "Could not load module: " + name;
+        if (!fnc) throw new Error("Could not load module (e1): " + name);
 
         let inst: IParser<any> = new fnc();
+
+        if (! inst.init) throw new Error("Could not load module (e2): " + name);
 
         inst.init(this);
         
@@ -39,9 +45,10 @@ export class DynamicParser implements IParser<any>, Core.IModuleHandler<DynamicP
     }
 
     unload(name: string, persist: boolean) : Core.IModuleHandler<DynamicParser> {
-        this.parsers[name].uninit();
-        delete this.parsers[name];
-
+        if (this.parsers[name]) {
+            this.parsers[name].uninit();
+            delete this.parsers[name];
+        }
         return this;
     }
     // Create a new instance of this module. Initialize and do things as needed

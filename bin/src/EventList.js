@@ -259,6 +259,7 @@ var Events = (function () {
     Events.INVITE = "INVITE";
     Events.PING = "PING";
     Events.PONG = "PONG";
+    Events.NICK = "NICK";
     return Events;
 }());
 exports.Events = Events;

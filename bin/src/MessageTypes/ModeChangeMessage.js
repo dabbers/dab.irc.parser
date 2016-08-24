@@ -8,9 +8,15 @@ var Core = require('dab.irc.core/src');
 var ModeChangeMessage = (function (_super) {
     __extends(ModeChangeMessage, _super);
     function ModeChangeMessage(msg, server) {
-        _super.call(this, msg.raw);
+        _super.call(this, msg);
         this._modes = [];
         this._target = null;
+        if (msg.command != "MODE")
+            throw new Error("Invalid message to parse, " + msg.command);
+        if (!server.attributes["CHANMODES_A"] || !server.attributes["CHANMODES_B"] || !server.attributes["CHANMODES_C"])
+            throw new Error("CHANMODES_* haven't been setup yet. Is this expected?");
+        if (!server.attributes["PREFIX_PREFIXES"] || !server.attributes["PREFIX_MODES"])
+            throw new Error("PREFIX_* haven't been setup yet. Is this expected?");
         var modesstring = msg.tokenized[3];
         var paramsindex = 4;
         var adding = true;

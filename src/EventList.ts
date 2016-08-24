@@ -253,4 +253,5 @@ export class Events {
     public static INVITE = "INVITE";
     public static PING = "PING";
     public static PONG = "PONG";
+    public static NICK = "NICK";
 }

@@ -1,14 +1,14 @@
 import {IParser} from '../IParser';
 import * as Core from 'dab.irc.core/src';
-import {ConversationMessage} from '../MessageTypes/ConversationMessage';
+import {ModeChangeMessage} from '../MessageTypes/ModeChangeMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Events} from '../EventList';
 
-export class Privmsg implements IParser<any> {
+export class TestParser implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
-        callback(server, new ConversationMessage(message, server));
+        callback(server, new Core.Message(":test.server.tld TEST AUTH :This is a test message"));
         return true;
     }
 
@@ -16,25 +16,16 @@ export class Privmsg implements IParser<any> {
     init(context : any) : void {
         if (context instanceof DynamicParser) {
             this.ctx = <DynamicParser>context;
-            this.ctx.parserDictionary[Events.PRIVMSG] = this;
-            this.ctx.parserDictionary[Events.NOTICE] = this;
+            this.ctx.parserDictionary["TEST"] = this;
             
             return;
         }
-
-        // Todo: make this more classy
-        throw new Error("Invalid context passed to NOTICE/PRIVMSG parser");
     }
-
-    // We are resuming. No state required for a parser
     resume(state : any) : void {
-        throw new Error("Don't resume a parser. Please call init");
     }
 
-    // Unloading this module. No state needed for callback.
     uninit() : any {
-        delete this.ctx.parserDictionary[Events.PRIVMSG];
-        delete this.ctx.parserDictionary[Events.NOTICE];
+        delete this.ctx.parserDictionary["TEST"];
         return null;
     }
     private ctx:DynamicParser;

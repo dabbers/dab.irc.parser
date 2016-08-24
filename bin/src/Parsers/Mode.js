@@ -19,13 +19,13 @@ var Privmsg = (function () {
             this.ctx.parserDictionary[EventList_1.Events.MODE] = this;
             return;
         }
-        throw "Invalid context passed to PRIVMSG parser";
+        throw new Error("Invalid context passed to PRIVMSG parser");
     };
     Privmsg.prototype.resume = function (state) {
-        throw "Don't resume a parser. Please call init";
+        throw new Error("Don't resume a parser. Please call init");
     };
     Privmsg.prototype.uninit = function () {
-        delete this.ctx.parserDictionary["MODE"];
+        delete this.ctx.parserDictionary[EventList_1.Events.MODE];
         return null;
     };
     return Privmsg;

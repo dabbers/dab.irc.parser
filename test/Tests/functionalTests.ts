@@ -27,8 +27,6 @@ class testSocket implements Core.ISocket {
     callback : Function;
 }
 
-
-
 class SampleIRCContext implements Core.IConnectionContext {
     connection: Core.Connection;
     me: Core.User = new Core.User("dabirc", "testident", null);

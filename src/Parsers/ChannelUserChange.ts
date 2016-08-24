@@ -24,18 +24,18 @@ export class ChannelUserChange implements IParser<any> {
         }
 
         // Todo: make this more classy
-        throw "Invalid context passed to ChannelUserChange parser";
+        throw new Error("Invalid context passed to ChannelUserChange parser");
     }
 
     // We are resuming. No state required for a parser
     resume(state : any) : void {
-        throw "Don't resume a parser. Please call init";
+        throw new Error("Don't resume a parser. Please call init");
     }
 
     // Unloading this module. No state needed for callback.
     uninit() : any {
-        delete this.ctx.parserDictionary["JOIN"];
-        delete this.ctx.parserDictionary["PART"];
+        delete this.ctx.parserDictionary[Events.JOIN];
+        delete this.ctx.parserDictionary[Events.PART];
         return null;
     }
     private ctx:DynamicParser;

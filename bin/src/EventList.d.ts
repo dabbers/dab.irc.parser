@@ -252,4 +252,5 @@ export declare class Events {
     static INVITE: string;
     static PING: string;
     static PONG: string;
+    static NICK: string;
 }

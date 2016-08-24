@@ -12,6 +12,8 @@ export class Do005 implements IParser<any> {
             let key = "";
             let value = "";
 
+            if (message.tokenized[i] == ":are") break;
+
             if (message.tokenized[i].indexOf("=") != -1) {
                 let sep = message.tokenized[i].split("=");
                 key = sep[0];
@@ -58,17 +60,17 @@ export class Do005 implements IParser<any> {
         }
 
         // Todo: make this more classy
-        throw "Invalid context passed to 005 parser";
+        throw new Error("Invalid context passed to 005 parser");
     }
 
     // We are resuming. No state required for a parser
     resume(state : any) : void {
-        throw "Don't resume a parser. Please call init";
+        throw new Error("Don't resume a parser. Please call init");
     }
 
     // Unloading this module. No state needed for callback.
     uninit() : any {
-        delete this.ctx.parserDictionary["005"];
+        delete this.ctx.parserDictionary[Numerics.ISUPPORT];
         return null;
     }
     private ctx:DynamicParser;
