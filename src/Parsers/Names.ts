@@ -1,5 +1,6 @@
 import {IParser} from '../IParser';
 import * as Core from 'dab.irc.core/src';
+import {NamesMessage} from '../MessageTypes/NamesMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Numerics} from '../EventList';
@@ -7,6 +8,7 @@ import {Numerics} from '../EventList';
 export class Names implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
+        callback(server, new NamesMessage(message, server));
         return true;
     }
 
