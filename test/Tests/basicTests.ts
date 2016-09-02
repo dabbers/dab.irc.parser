@@ -104,6 +104,14 @@ export class BasicTests extends tsUnit.TestClass {
         this.areIdentical(Core.ModeChangeType.Adding, m.modes[3].change);
         this.areIdentical(undefined, m.modes[3].argument);
         this.areIdentical("+N", m.modes[3].display);
+
+
+        this.isTrue(
+            (m.modes[0].target == m.modes[1].target) && 
+            (m.modes[2].target == m.modes[3].target) && 
+            (m.modes[1].target == m.modes[2].target) &&
+             m.modes[0].target == m.target, "Mode targets don't match"
+        );
     }
 
     channelUserChangeTest() {

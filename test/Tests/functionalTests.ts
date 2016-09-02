@@ -89,6 +89,8 @@ export class FunctionalTests extends tsUnit.TestClass {
     endToEnd_Part :boolean = false;
     endToEnd_Motd :boolean = false;
 
+    endToEnd_Names : boolean = false;
+
     endToEndTest() : void {
         let data = ":kira.orbital.link NOTICE AUTH :*** Looking up your hostname...\r\n" + 
             ":servr 001 dabirc :Welcome to the Orbital Link IRC Network dabirc!baditp@127.0.0.0\r\n" +
@@ -103,7 +105,7 @@ export class FunctionalTests extends tsUnit.TestClass {
             ":dabirc!baditp@127.0.0.0 JOIN :#test\r\n" +
             ":servr 332 dabirc #test :channel topic would be here in a real channel maybe\r\n" +
             ":servr 333 dabirc #test dabirc2 1466217608\r\n" + // Timestamp for channel topic set and who set it
-            ":servr 353 dabirc @ #test :dabirc &@dabirc2 ~@dabirc3\r\n" + // normally we'd need to enable multi prefix, but for the test pretend it was
+            ":servr 353 dabirc @ #test :dabirc &dabirc2 ~@dabirc3 dabirc4 &@dabirc5!ident@host dabirc6!ident@host\r\n" + // Mixing different expected input types into 1 msg. Normally they'd be all or nothing.
             ":servr 366 dabirc #test :End of /NAMES list.\r\n" +
             ":dabirc2!ident@host PRIVMSG #test :testing\r\n" +
             ":dabirc2!ident@host MODE #test +v dabirc\r\n" +
@@ -212,6 +214,48 @@ export class FunctionalTests extends tsUnit.TestClass {
             this.areIdentical("Goodbye message", msg.message);
             this.endToEnd_Part = true;
         });
+        svr.on(Parser.Numerics.NAMREPLY, (s:Parser.ParserServer, m:Core.Message) => {
+            let msg = <Parser.NamesMessage>m;
+            
+            this.areIdentical(Parser.ChannelStatus.Secret, msg.status, "Channel status was incorrectly parsed");
+            // :servr 353 dabirc @ #test :dabirc &dabirc2 ~@dabirc3 dabirc4 &@dabirc5!ident@host dabirc6!ident@host\r\n
+
+            this.areIdentical("dabirc", msg.users[0].nick, "dabirc nick doesn't match");
+            this.areIdentical("dabirc2", msg.users[1].nick, "dabirc2 nick doesn't match");
+            this.areIdentical("dabirc3", msg.users[2].nick, "dabirc3 nick doesn't match");
+            this.areIdentical("dabirc4", msg.users[3].nick, "dabirc4 nick doesn't match");
+            this.areIdentical("dabirc5", msg.users[4].nick, "dabirc5 nick doesn't match");
+            this.areIdentical("dabirc6", msg.users[5].nick, "dabirc6 nick doesn't match");
+
+            this.areIdentical(undefined, msg.users[0].ident, "dabirc ident doesn't match");
+            this.areIdentical(undefined, msg.users[1].ident, "dabirc2 ident doesn't match");
+            this.areIdentical(undefined, msg.users[2].ident, "dabirc3 ident doesn't match");
+            this.areIdentical(undefined, msg.users[3].ident, "dabirc4 ident doesn't match");
+            this.areIdentical("ident", msg.users[4].ident, "dabirc5 ident doesn't match");
+            this.areIdentical("ident", msg.users[5].ident, "dabirc6 ident doesn't match");
+
+            this.areIdentical(undefined, msg.users[0].host, "dabirc ident doesn't match");
+            this.areIdentical(undefined, msg.users[1].host, "dabirc2 ident doesn't match");
+            this.areIdentical(undefined, msg.users[2].host, "dabirc3 ident doesn't match");
+            this.areIdentical(undefined, msg.users[3].host, "dabirc4 ident doesn't match");
+            this.areIdentical("host", msg.users[4].host, "dabirc5 ident doesn't match");
+            this.areIdentical("host", msg.users[5].host, "dabirc6 ident doesn't match");
+            
+            this.areIdentical(0, msg.users[0].modes.length, "dabirc has too many mode");
+            this.areIdentical(1, msg.users[1].modes.length, "dabirc has too many mode");
+            this.areIdentical(2, msg.users[2].modes.length, "dabirc has too many mode");
+            this.areIdentical(0, msg.users[3].modes.length, "dabirc has too many mode");
+            this.areIdentical(2, msg.users[4].modes.length, "dabirc has too many mode");
+            this.areIdentical(0, msg.users[5].modes.length, "dabirc has too many mode");
+            
+            this.areIdentical("&", msg.users[1].modes[0].character, "dabirc2 first perm doesn't match");
+            this.areIdentical("~", msg.users[2].modes[0].character, "dabirc3 first perm doesn't match");
+            this.areIdentical("@", msg.users[2].modes[1].character, "dabirc3 second perm doesn't match");
+            this.areIdentical("&", msg.users[4].modes[0].character, "dabirc5 second perm doesn't match");
+            this.areIdentical("@", msg.users[4].modes[1].character, "dabirc5 second perm doesn't match");
+
+            this.endToEnd_Names = true;
+        });
         
         ctx.dataCallback = svr.dataReceived;
 
@@ -236,6 +280,7 @@ export class FunctionalTests extends tsUnit.TestClass {
         this.isTrue(this.endToEnd_PRIVMSG_Chan_action, "privmsg channel action error");
         this.isTrue(this.endToEnd_PRIVMSG_Chan_Wall, "privmsg channel wall error");
         this.isTrue(this.endToEnd_PrivmsgPM, "privmsg pm error");
+        this.isTrue(this.endToEnd_Names, "Names error");
     }
 
 }

@@ -18,7 +18,9 @@ export class ModeChangeMessage extends Core.Message {
 
         let prefixz = server.attributes["PREFIX_PREFIXES"];
         let start = modesstring[0] == ':' ? 1 : 0;
-        
+
+        this._target = (isChannel ? new Core.Channel(msg.tokenized[2]) : new Core.User(msg.tokenized[2], null, null));
+
         for (let i = start; i < modesstring.length; i++) {
             if (modesstring[i] == '+') {
                 adding = true;
@@ -49,11 +51,10 @@ export class ModeChangeMessage extends Core.Message {
             else if (!isChannel) { // else if (msg.Parts[2] == self.Me.Nick) 
                 mode.type = Core.ModeType.UMode;
             }
-
+            mode.target = this._target;
+            
             this._modes.push(mode);
         }
-
-        this._target = (isChannel ? new Core.Channel(msg.tokenized[2]) : new Core.User(msg.tokenized[2], null, null));
     }
 
     get modes() : Core.Mode[] {

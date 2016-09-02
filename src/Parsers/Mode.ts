@@ -29,7 +29,7 @@ export class Privmsg implements IParser<any> {
         }
 
         // Todo: make this more classy
-        throw new Error("Invalid context passed to PRIVMSG parser");
+        throw new Error("Invalid context passed to Mode parser");
     }
 
     // We are resuming. No state required for a parser

@@ -1,14 +1,12 @@
 import {IParser} from '../IParser';
 import * as Core from 'dab.irc.core/src';
-import {NickChangeMessage} from '../MessageTypes/NickChangeMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
-import {Events} from '../EventList';
+import {Numerics} from '../EventList';
 
-export class NickChange implements IParser<any> {
+export class Names implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
-        callback(server, new NickChangeMessage(message));
         return true;
     }
 
@@ -16,13 +14,13 @@ export class NickChange implements IParser<any> {
     init(context : any) : void {
         if (context instanceof DynamicParser) {
             this.ctx = <DynamicParser>context;
-            this.ctx.parserDictionary[Events.NICK] = this;
+            this.ctx.parserDictionary[Numerics.NAMREPLY] = this;
             
             return;
         }
 
         // Todo: make this more classy
-        throw new Error("Invalid context passed to Nick parser");
+        throw new Error("Invalid context passed to NAMES parser");
     }
 
     // We are resuming. No state required for a parser
@@ -32,7 +30,7 @@ export class NickChange implements IParser<any> {
 
     // Unloading this module. No state needed for callback.
     uninit() : any {
-        delete this.ctx.parserDictionary[Events.NICK];
+        delete this.ctx.parserDictionary[Numerics.NAMREPLY];
         return null;
     }
     private ctx:DynamicParser;
