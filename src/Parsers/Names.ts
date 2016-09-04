@@ -8,6 +8,12 @@ import {Numerics} from '../EventList';
 export class Names implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
+        if (!server.attributes["PREFIX"]) {
+            server.attributes["PREFIX"] = "(ov)@+";
+            server.attributes["PREFIX_MODES"] = "ov";
+            server.attributes["PREFIX_PREFIXES"] = "@+";
+        }
+
         callback(server, new NamesMessage(message, server));
         return true;
     }

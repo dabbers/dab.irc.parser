@@ -13,6 +13,11 @@ export class NamesMessage extends Core.Message {
     constructor(msg : Core.Message, server:ParserServer) {
         super(msg);
 
+        // the idea is to keep this message similiar to the raw one, just "organized"
+        // We don't sort the users list afterwards, because 1) there will likely be more users in 
+        // another message, and 2) There may be scenarios where you want the order of users preserved
+        // but we don't want them to have to re-parse the message. 
+        // If a caller wants the user list wants the users sorted, they may do so themselves.
         let prefixes = server.attributes["PREFIX_PREFIXES"];
 
         switch(this.tokenized[3]) {
@@ -34,7 +39,8 @@ export class NamesMessage extends Core.Message {
         if (restore) this.tokenized[5] = this.tokenized[5].substr(1);
 
         for(let i = 5; i < this.tokenized.length; i++) {
-            if (!this.tokenized[i]) throw new Error("Why is this item empty?"); // not sure why this is here?
+            // not sure why this is here? Ported over from dabbit.base. Just in case
+            if (!this.tokenized[i]) throw new Error("Why is this item empty?");
             
             let user : Core.User;
 
@@ -55,8 +61,10 @@ export class NamesMessage extends Core.Message {
                 user = new Core.User(entry, null, null);
             }
 
+            // While a prefix character is in the nick, strip it out
             while (prefixes.indexOf(user.nick[0].toString()) != -1) {
-                let mode = new Core.Mode();
+                // Essentially recreating the whole "/mode #chan +mode nick"
+                let mode = new Core.Mode(); 
 
                 mode.character = user.nick[0].toString();
                 mode.argument = user.nick;
