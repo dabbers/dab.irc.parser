@@ -4,6 +4,7 @@ import {NickChangeMessage} from '../MessageTypes/NickChangeMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Events} from '../EventList';
+import * as path from 'path';
 
 export class NickChange implements IParser<any> {
     
@@ -33,6 +34,9 @@ export class NickChange implements IParser<any> {
     // Unloading this module. No state needed for callback.
     uninit() : any {
         delete this.ctx.parserDictionary[Events.NICK];
+
+        let fullPath = path.join(__dirname, "..", "MessageTypes", "NickChangeMessage.js");
+        if (require.cache[fullPath]) delete require.cache[fullPath];
         return null;
     }
     private ctx:DynamicParser;

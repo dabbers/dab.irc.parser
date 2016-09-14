@@ -4,6 +4,7 @@ import {ModeChangeMessage} from '../MessageTypes/ModeChangeMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Events} from '../EventList';
+import * as path from 'path';
 
 export class Privmsg implements IParser<any> {
     
@@ -40,6 +41,9 @@ export class Privmsg implements IParser<any> {
     // Unloading this module. No state needed for callback.
     uninit() : any {
         delete this.ctx.parserDictionary[Events.MODE];
+
+        let fullPath = path.join(__dirname, "..", "MessageTypes", "ModeChangeMessage.js");
+        if (require.cache[fullPath]) delete require.cache[fullPath];
         return null;
     }
     private ctx:DynamicParser;

@@ -4,6 +4,7 @@ import {ConversationMessage} from '../MessageTypes/ConversationMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Events} from '../EventList';
+import * as path from 'path';
 
 export class Privmsg implements IParser<any> {
     
@@ -35,6 +36,9 @@ export class Privmsg implements IParser<any> {
     uninit() : any {
         delete this.ctx.parserDictionary[Events.PRIVMSG];
         delete this.ctx.parserDictionary[Events.NOTICE];
+
+        let fullPath = path.join(__dirname, "..", "MessageTypes", "ConversationMessage.js");
+        if (require.cache[fullPath]) delete require.cache[fullPath];
         return null;
     }
     private ctx:DynamicParser;

@@ -4,6 +4,7 @@ import {NamesMessage} from '../MessageTypes/NamesMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Numerics} from '../EventList';
+import * as path from 'path';
 
 export class Names implements IParser<any> {
     
@@ -39,6 +40,9 @@ export class Names implements IParser<any> {
     // Unloading this module. No state needed for callback.
     uninit() : any {
         delete this.ctx.parserDictionary[Numerics.NAMREPLY];
+
+        let fullPath = path.join(__dirname, "..", "MessageTypes", "NamesMessage.js");
+        if (require.cache[fullPath]) delete require.cache[fullPath];
         return null;
     }
     private ctx:DynamicParser;
