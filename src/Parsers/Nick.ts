@@ -9,7 +9,13 @@ import * as path from 'path';
 export class NickChange implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
-        callback(server, new NickChangeMessage(message));
+        let msg = new NickChangeMessage(message);
+
+        callback(server, msg);
+
+        msg.command += ":" + (<Core.User>msg.from).nick;
+        callback(server, msg);
+        
         return true;
     }
 

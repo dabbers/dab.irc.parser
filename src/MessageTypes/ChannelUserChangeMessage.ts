@@ -16,5 +16,9 @@ export class ChannelUserChangeMessage extends Core.Message {
         this._destination = new Core.Channel(msg.tokenized[2]);
     }
 
+    toString(): string {
+        return "[ChannelUserChangeMessage " + this.from.display + " " + this.command + " " + this.destination.display + "]";
+    }
+
     protected _destination : Core.Channel = null;
 }

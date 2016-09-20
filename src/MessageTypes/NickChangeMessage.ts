@@ -15,5 +15,9 @@ export class NickChangeMessage extends Core.Message {
         this._to = new Core.User( (this._tokenized[2][0] == ':' ? this._tokenized[2].substr(1) : this._tokenized[2]), null, null );
     }
 
+    toString() : string {
+        return "[NickChangeMessage " + this.from.display + " to " + this._to.nick + "]";
+    }
+
     private _to:Core.User;
 }

@@ -65,4 +65,8 @@ export class ConversationMessage extends Core.Message {
     get ctcp(): boolean {
         return this._ctcp;
     }
+
+    toString() : string {
+        return "[ConversationMessage " + this.from.display + " to " + this.destination.display + "]";
+    }
 }

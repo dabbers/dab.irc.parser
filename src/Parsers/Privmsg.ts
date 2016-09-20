@@ -9,7 +9,18 @@ import * as path from 'path';
 export class Privmsg implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
-        callback(server, new ConversationMessage(message, server));
+        let msg = new ConversationMessage(message, server);
+        let original_command = msg.command;
+        callback(server, msg);
+        
+        msg.command = original_command + ":" + msg.destination.display;
+        callback(server, msg);
+
+        if (msg.wall) {
+            msg.command = original_command + ":" + msg.wall + msg.destination.display;
+            callback(server, msg);
+        }
+
         return true;
     }
 

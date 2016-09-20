@@ -9,7 +9,17 @@ import * as path from 'path';
 export class ChannelUserChange implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
-        callback(server, new ChannelUserChangeMessage(message));
+        let msg = new ChannelUserChangeMessage(message);
+        let original_command = msg.command;
+
+        callback(server, msg);
+
+        msg.command = original_command + ":" + msg.destination.display;
+        callback(server, msg);
+
+        msg.command = original_command + ":" + (<Core.User>msg.from).nick;
+        callback(server, msg);
+
         return true;
     }
 

@@ -67,4 +67,8 @@ export class ModeChangeMessage extends Core.Message {
 
     protected _modes : Core.Mode[] = [];
     protected _target : Core.Target.ITarget = null;
+
+     toString() : string {
+         return "[ModeChangeMessage " + this._target.display + "]";
+     }
 }

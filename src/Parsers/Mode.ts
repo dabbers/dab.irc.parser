@@ -6,7 +6,7 @@ import {DynamicParser} from '../DynamicParser';
 import {Events} from '../EventList';
 import * as path from 'path';
 
-export class Privmsg implements IParser<any> {
+export class Mode implements IParser<any> {
     
     parse(server: ParserServer, message : Core.Message, callback : (server :ParserServer, message : Core.Message) => any) : boolean {
         var attr = server.attributes;
@@ -16,7 +16,12 @@ export class Privmsg implements IParser<any> {
             attr["CHANTYPES"] = "#&";
         }
 
-        callback(server, new ModeChangeMessage(message, server));
+        let msg = new ModeChangeMessage(message, server);
+        callback(server, msg);
+
+        msg.command = "MODE:" + msg.target.display;
+        callback(server, msg);
+        
         return true;
     }
 

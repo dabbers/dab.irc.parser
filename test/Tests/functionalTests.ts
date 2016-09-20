@@ -227,17 +227,17 @@ export class FunctionalTests extends tsUnit.TestClass {
             this.areIdentical("dabirc5", msg.users[4].nick, "dabirc5 nick doesn't match");
             this.areIdentical("dabirc6", msg.users[5].nick, "dabirc6 nick doesn't match");
 
-            this.areIdentical(undefined, msg.users[0].ident, "dabirc ident doesn't match");
-            this.areIdentical(undefined, msg.users[1].ident, "dabirc2 ident doesn't match");
-            this.areIdentical(undefined, msg.users[2].ident, "dabirc3 ident doesn't match");
-            this.areIdentical(undefined, msg.users[3].ident, "dabirc4 ident doesn't match");
+            this.isFalsey(msg.users[0].ident, "dabirc ident doesn't match");
+            this.isFalsey(msg.users[1].ident, "dabirc2 ident doesn't match");
+            this.isFalsey(msg.users[2].ident, "dabirc3 ident doesn't match");
+            this.isFalsey(msg.users[3].ident, "dabirc4 ident doesn't match");
             this.areIdentical("ident", msg.users[4].ident, "dabirc5 ident doesn't match");
             this.areIdentical("ident", msg.users[5].ident, "dabirc6 ident doesn't match");
 
-            this.areIdentical(undefined, msg.users[0].host, "dabirc ident doesn't match");
-            this.areIdentical(undefined, msg.users[1].host, "dabirc2 ident doesn't match");
-            this.areIdentical(undefined, msg.users[2].host, "dabirc3 ident doesn't match");
-            this.areIdentical(undefined, msg.users[3].host, "dabirc4 ident doesn't match");
+            this.isFalsey(msg.users[0].host, "dabirc ident doesn't match");
+            this.isFalsey(msg.users[1].host, "dabirc2 ident doesn't match");
+            this.isFalsey(msg.users[2].host, "dabirc3 ident doesn't match");
+            this.isFalsey(msg.users[3].host, "dabirc4 ident doesn't match");
             this.areIdentical("host", msg.users[4].host, "dabirc5 ident doesn't match");
             this.areIdentical("host", msg.users[5].host, "dabirc6 ident doesn't match");
             

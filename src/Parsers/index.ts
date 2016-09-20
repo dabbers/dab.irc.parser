@@ -7,6 +7,7 @@ export function getParsers() : IParser<any>[] {
 
     for(var i in paths) {
         if (paths[i].indexOf("index") == 0) continue;
+        if (paths[i].indexOf("TestParser") == 0) continue;
         if (paths[i].indexOf(".ts") > 0 || paths[i].indexOf(".map") > 0) continue;
         var tmp = require( __dirname + "/" + paths[i]);
 

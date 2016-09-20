@@ -36,6 +36,7 @@ class SampleIRCContext implements Core.IConnectionContext {
 
     logSentMessages: boolean = true;
     logReceivedMessages: boolean = true;
+    channelPrefixes:string[];
 }
 
 var ctx = new SampleIRCContext();

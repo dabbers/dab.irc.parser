@@ -31,11 +31,11 @@ export class DynamicParser implements IParser<any>, Core.IModuleHandler<DynamicP
 
         let fnc = obj[indx];
 
-        if (!fnc) throw new Error("Could not load module (e1): " + name);
+        if (!fnc) throw new Error("Could not load module because of no index with the same classname exists: " + name);
 
         let inst: IParser<any> = new fnc();
 
-        if (! inst.init) throw new Error("Could not load module (e2): " + name);
+        if (! inst.init) throw new Error("Could not load module because the class doesn't export an init function: " + name);
 
         inst.init(this);
         

@@ -13,12 +13,15 @@ export class NamesMessage extends Core.Message {
     constructor(msg : Core.Message, server:ParserServer) {
         super(msg);
 
+        this._users = [];
+
         // the idea is to keep this message similiar to the raw one, just "organized"
         // We don't sort the users list afterwards, because 1) there will likely be more users in 
         // another message, and 2) There may be scenarios where you want the order of users preserved
         // but we don't want them to have to re-parse the message. 
         // If a caller wants the user list wants the users sorted, they may do so themselves.
         let prefixes = server.attributes["PREFIX_PREFIXES"];
+        this._destination = new Core.Channel(this.tokenized[4]);
 
         switch(this.tokenized[3]) {
             case '@':
@@ -49,12 +52,12 @@ export class NamesMessage extends Core.Message {
 
             if (identIndx != -1) {
                 let nick = entry.substring(0, identIndx);
-                let rest = entry.substr(identIndx);
+                let rest = entry.substr(identIndx + 1);
 
                 let hostIndx = rest.indexOf("@");
 
                 let ident = rest.substring(0, hostIndx);
-                let host = rest.substr(hostIndx);
+                let host = rest.substr(hostIndx + 1);
                 user = new Core.User(nick, ident, host);
             }
             else {
@@ -76,10 +79,12 @@ export class NamesMessage extends Core.Message {
                 user.nick = user.nick.substring(1);
             }
 
-            user.modes.sort(function(s1, s2)
-            {
-                return prefixes.indexOf(s1.character) - prefixes.indexOf(s2.character);
-            });
+            if (user.modes) {
+                user.modes.sort(function(s1, s2)
+                {
+                    return prefixes.indexOf(s1.character) - prefixes.indexOf(s2.character);
+                });
+            }
 
             this._users.push(user);
         }
@@ -102,5 +107,9 @@ export class NamesMessage extends Core.Message {
 
     get users() : Core.User[] {
         return this._users;
+    }
+
+    toString() : string {
+        return "[NamesMessage " + this.destination.display + "]";
     }
 }
