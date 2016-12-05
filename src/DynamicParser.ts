@@ -18,7 +18,7 @@ export class DynamicParser implements IParser<any>, Core.IModuleHandler<DynamicP
         return false;
     }
 
-    load(name: string) : Core.IModuleHandler<DynamicParser> {
+    load(name: string, noResume?:boolean) : Core.IModuleHandler<DynamicParser> {
         name = name.replace(".js", "").replace(".", "");
 
         let fullPath = path.join(__dirname, "Parsers", name);

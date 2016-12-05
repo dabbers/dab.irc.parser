@@ -69,4 +69,8 @@ export class ConversationMessage extends Core.Message {
     toString() : string {
         return "[ConversationMessage " + this.from.display + " to " + this.destination.display + "]";
     }
+
+    updateDestinationReference(dest:Core.Target.ITarget) {
+        this._destination = dest;
+    }
 }

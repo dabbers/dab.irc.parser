@@ -4,6 +4,7 @@ import {ModeChangeMessage} from '../MessageTypes/ModeChangeMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Events} from '../EventList';
+import {ExEvent} from '../EventList';
 import * as path from 'path';
 
 export class Mode implements IParser<any> {
@@ -19,8 +20,23 @@ export class Mode implements IParser<any> {
         let msg = new ModeChangeMessage(message, server);
         callback(server, msg);
 
-        msg.command = "MODE:" + msg.target.display;
+        msg.updateCommandString(ExEvent.create("MODE", msg.destination.display));
         callback(server, msg);
+
+        // DevNote: Is this a good idea? Will this cause performance issues?
+        for(let i in msg.modes) {
+            // Create an event in the form of MODE:<Channel Or Nickname>:<ModeCharacter>
+            msg.updateCommandString(ExEvent.create("MODE", msg.destination.display, function(j:any) { return msg.modes[j].character; }(i) ));
+            callback(server, msg);
+
+            // Create an event in the form of MODE:<Channel Or Nickname>:<+ or -><ModeCharacter>
+            msg.updateCommandString(ExEvent.create(
+                "MODE", 
+                msg.destination.display, 
+                function(j:any) { return (msg.modes[j].change == Core.ModeChangeType.Adding ? "+" : "-") + msg.modes[j].character; }(i) 
+            ));
+            callback(server, msg);
+        }
         
         return true;
     }
@@ -39,7 +55,7 @@ export class Mode implements IParser<any> {
     }
 
     // We are resuming. No state required for a parser
-    resume(state : any) : void {
+    resume(context : any, state : any) : void {
         throw new Error("Don't resume a parser. Please call init");
     }
 

@@ -63,6 +63,7 @@ class SampleIRCContext implements Core.IConnectionContext {
 
     logSentMessages: boolean;
     logReceivedMessages: boolean;
+    channelPrefixes: string[];
 }
 
 
@@ -126,7 +127,7 @@ export class FunctionalTests extends tsUnit.TestClass {
 
         let ctx = new SampleIRCContext();
         let connection = new Core.Connection();
-        let svr = new Parser.ParserServer("", connection);
+        let svr = new Parser.ParserServer(ctx, connection);
 
         svr.on(Parser.Events.NOTICE, (s:Parser.ParserServer, m:Core.Message) => {
             let msg = <Parser.ConversationMessage>m;
@@ -155,7 +156,7 @@ export class FunctionalTests extends tsUnit.TestClass {
         svr.on(Parser.Events.MODE, (s:Parser.ParserServer, m:Core.Message) => {
             let msg = <Parser.ModeChangeMessage>m;
 
-            if (msg.target instanceof Core.User) {
+            if (msg.destination instanceof Core.User) {
                 this.areIdentical("i", msg.modes[0].character) 
                 this.areIdentical(Core.ModeChangeType.Adding, msg.modes[0].change);
                 this.areIdentical("w", msg.modes[1].character) 
@@ -167,7 +168,7 @@ export class FunctionalTests extends tsUnit.TestClass {
 
                 this.endToEnd_ModeUser = true;
             }
-            else if (msg.target instanceof Core.Channel) {
+            else if (msg.destination instanceof Core.Channel) {
                 if (msg.modes.length == 1) {
                     if (msg.modes[0].change == Core.ModeChangeType.Adding) {
                         this.areIdentical("v", msg.modes[0].character);

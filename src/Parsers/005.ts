@@ -51,7 +51,7 @@ export class Do005 implements IParser<any> {
     }
 
     // Create a new instance of this module. Initialize and do things as needed
-    init(context : any) : void {
+    init(context : any, noResume?:boolean) : void {
         if (context instanceof DynamicParser) {
             this.ctx = <DynamicParser>context;
             this.ctx.parserDictionary[Numerics.ISUPPORT] = this;
@@ -64,7 +64,7 @@ export class Do005 implements IParser<any> {
     }
 
     // We are resuming. No state required for a parser
-    resume(state : any) : void {
+    resume(context : any, state : any) : void {
         throw new Error("Don't resume a parser. Please call init");
     }
 

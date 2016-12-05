@@ -3,8 +3,32 @@ import * as Parser from '../../src/';
 import * as Core from 'dab.irc.core/src';
 import * as fs from 'fs';
 import * as path from 'path';
+
+class TestContext implements Core.IConnectionContext {
+    me: Core.User;
+    
+    host: string;
+    port: number;
+    ssl: boolean;
+    rejectUnauthedCerts: boolean;
+
+    dataCallback: (d: Core.Message) => {
+    }
+
+    createConnection(cb:() => any): Core.ISocket {
+        return null;
+    }
+
+    connectionEstablishedCallback (c: Core.Connection) :any {
+        return null;
+    }
+    
+    logSentMessages: boolean;
+    logReceivedMessages: boolean;
+    channelPrefixes:string[];
+}
 export class BasicTests extends tsUnit.TestClass {
-    private servr : Parser.ParserServer = new Parser.ParserServer("a", null);
+    private servr : Parser.ParserServer = new Parser.ParserServer(new TestContext(), null);
     constructor() {
         super();
 
@@ -107,10 +131,10 @@ export class BasicTests extends tsUnit.TestClass {
 
 
         this.isTrue(
-            (m.modes[0].target == m.modes[1].target) && 
-            (m.modes[2].target == m.modes[3].target) && 
-            (m.modes[1].target == m.modes[2].target) &&
-             m.modes[0].target == m.target, "Mode targets don't match"
+            (m.modes[0].destination == m.modes[1].destination) && 
+            (m.modes[2].destination == m.modes[3].destination) && 
+            (m.modes[1].destination == m.modes[2].destination) &&
+             m.modes[0].destination == m.destination, "Mode targets don't match"
         );
     }
 

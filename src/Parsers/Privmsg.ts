@@ -4,6 +4,7 @@ import {ConversationMessage} from '../MessageTypes/ConversationMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Events} from '../EventList';
+import {ExEvent} from '../EventList';
 import * as path from 'path';
 
 export class Privmsg implements IParser<any> {
@@ -13,11 +14,23 @@ export class Privmsg implements IParser<any> {
         let original_command = msg.command;
         callback(server, msg);
         
-        msg.command = original_command + ":" + msg.destination.display;
+        let from = (msg.from instanceof Core.User ? (<Core.User>msg.from).nick : msg.from.display);
+
+        // Event of <PRIVMSG or NOTICE>:<#Channel or Nickname>
+        msg.updateCommandString(ExEvent.create(original_command, msg.destination.display));
+        callback(server, msg);
+        
+        // Event of <PRIVMSG or NOTICE>:<Server or Nickname source>:<#Channel or Nickname destination>
+        msg.updateCommandString(ExEvent.create(original_command, from, msg.destination.display));
         callback(server, msg);
 
         if (msg.wall) {
-            msg.command = original_command + ":" + msg.wall + msg.destination.display;
+            // Event of <PRIVMSG or NOTICE>:<Wall message type (~&@%+)>:<#Channel or Nickname destination>
+            msg.updateCommandString(ExEvent.create(original_command, msg.wall, msg.destination.display));
+            callback(server, msg);
+
+            // Event of <PRIVMSG or NOTICE>:<Server or Nickname source>:<Wall message type (~&@%+)>:<#Channel or Nickname destination>
+            msg.updateCommandString(ExEvent.create(original_command, from, msg.wall, msg.destination.display));
             callback(server, msg);
         }
 
@@ -39,7 +52,7 @@ export class Privmsg implements IParser<any> {
     }
 
     // We are resuming. No state required for a parser
-    resume(state : any) : void {
+    resume(context : any, state : any) : void {
         throw new Error("Don't resume a parser. Please call init");
     }
 

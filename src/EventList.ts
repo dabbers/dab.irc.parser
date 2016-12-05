@@ -255,3 +255,9 @@ export class Events {
     public static PONG = "PONG";
     public static NICK = "NICK";
 }
+
+export class ExEvent {
+    static create(primary:string, secondary:string, tertiary:string = null, quaternary:string = null) : string {
+        return primary + ":" + secondary + (tertiary?":"+tertiary:"")+ (quaternary?":"+quaternary:"");
+    }
+}

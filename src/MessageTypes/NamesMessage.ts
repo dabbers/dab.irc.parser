@@ -71,7 +71,7 @@ export class NamesMessage extends Core.Message {
 
                 mode.character = user.nick[0].toString();
                 mode.argument = user.nick;
-                mode.target = this.destination;
+                mode.destination = this.destination;
                 mode.change = Core.ModeChangeType.Adding;
                 mode.type = Core.ModeType.ChannelUser;
 
@@ -111,5 +111,8 @@ export class NamesMessage extends Core.Message {
 
     toString() : string {
         return "[NamesMessage " + this.destination.display + "]";
+    }
+    updateDestinationReference(dest:Core.Target.ITarget) {
+        this._destination = dest;
     }
 }

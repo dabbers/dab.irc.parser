@@ -51,7 +51,7 @@ export class ModeChangeMessage extends Core.Message {
             else if (!isChannel) { // else if (msg.Parts[2] == self.Me.Nick) 
                 mode.type = Core.ModeType.UMode;
             }
-            mode.target = this._target;
+            mode.destination = this._target;
             
             this._modes.push(mode);
         }
@@ -61,14 +61,17 @@ export class ModeChangeMessage extends Core.Message {
         return this._modes;
     }
 
-    get target() : Core.Target.ITarget {
+    get destination() : Core.Target.ITarget {
         return this._target;
     }
 
     protected _modes : Core.Mode[] = [];
-    protected _target : Core.Target.ITarget = null;
+    protected _target : Core.Target.ITarget;
 
      toString() : string {
          return "[ModeChangeMessage " + this._target.display + "]";
      }
+    updateDestinationReference(dest:Core.Target.ITarget) {
+        this._target = dest;
+    }
 }

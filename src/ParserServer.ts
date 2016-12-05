@@ -12,8 +12,8 @@ export class ParserServer extends Core.BaseServer {
     get parser() : DynamicParser {
         return this._parser;
     }
-    constructor(host: string, connection: Core.Connection, parser:DynamicParser = new DynamicParser()) {
-        super(host);
+    constructor(context : Core.IConnectionContext, connection: Core.Connection, parser:DynamicParser = new DynamicParser()) {
+        super(context.host);
 
         this.connection = connection;
         this._parser = parser;
@@ -90,5 +90,5 @@ export class ParserServer extends Core.BaseServer {
     }
 
     private events : EventEmitter;
-    private _parser : DynamicParser;
+    protected _parser : DynamicParser;
 }

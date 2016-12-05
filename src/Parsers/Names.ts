@@ -4,6 +4,7 @@ import {NamesMessage} from '../MessageTypes/NamesMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Numerics} from '../EventList';
+import {ExEvent} from '../EventList';
 import * as path from 'path';
 
 export class Names implements IParser<any> {
@@ -15,7 +16,12 @@ export class Names implements IParser<any> {
             server.attributes["PREFIX_PREFIXES"] = "@+";
         }
 
-        callback(server, new NamesMessage(message, server));
+        let msg = new NamesMessage(message, server);
+        callback(server, msg);
+
+        msg.updateCommandString( ExEvent.create(Numerics.NAMREPLY, msg.destination.display) );
+        callback(server, msg);
+        
         return true;
     }
 
@@ -33,7 +39,7 @@ export class Names implements IParser<any> {
     }
 
     // We are resuming. No state required for a parser
-    resume(state : any) : void {
+    resume(context : any, state : any) : void {
         throw new Error("Don't resume a parser. Please call init");
     }
 

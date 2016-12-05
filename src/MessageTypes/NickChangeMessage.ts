@@ -20,4 +20,8 @@ export class NickChangeMessage extends Core.Message {
     }
 
     private _to:Core.User;
+    
+    updateDestinationReference(dest:Core.User) {
+        this._to = dest;
+    }
 }

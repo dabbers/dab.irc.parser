@@ -20,5 +20,9 @@ export class ChannelUserChangeMessage extends Core.Message {
         return "[ChannelUserChangeMessage " + this.from.display + " " + this.command + " " + this.destination.display + "]";
     }
 
+    updateDestinationReference(dest:Core.Channel) {
+        this._destination = dest;
+    }
+
     protected _destination : Core.Channel = null;
 }

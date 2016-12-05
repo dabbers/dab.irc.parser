@@ -21,7 +21,7 @@ export class TestParser implements IParser<any> {
             return;
         }
     }
-    resume(state : any) : void {
+    resume(context : any, state : any) : void {
     }
 
     uninit() : any {

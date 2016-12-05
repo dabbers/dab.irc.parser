@@ -6,9 +6,9 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "sourceMap": false,
+        "sourceMap": true,
         "moduleResolution": "node",
-        "target": "es5",
+        "target": "es2015",
         "noImplicitReturns": true,
         "declaration": true
     },

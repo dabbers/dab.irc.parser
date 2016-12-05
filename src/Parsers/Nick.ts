@@ -4,6 +4,8 @@ import {NickChangeMessage} from '../MessageTypes/NickChangeMessage';
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Events} from '../EventList';
+import {ExEvent} from '../EventList';
+
 import * as path from 'path';
 
 export class NickChange implements IParser<any> {
@@ -13,7 +15,7 @@ export class NickChange implements IParser<any> {
 
         callback(server, msg);
 
-        msg.command += ":" + (<Core.User>msg.from).nick;
+        msg.updateCommandString(ExEvent.create(msg.command, (<Core.User>msg.from).nick));
         callback(server, msg);
         
         return true;
@@ -33,7 +35,7 @@ export class NickChange implements IParser<any> {
     }
 
     // We are resuming. No state required for a parser
-    resume(state : any) : void {
+    resume(context : any, state : any) : void {
         throw new Error("Don't resume a parser. Please call init");
     }
 

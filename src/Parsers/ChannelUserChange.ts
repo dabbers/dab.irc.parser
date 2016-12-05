@@ -4,6 +4,7 @@ import {ChannelUserChangeMessage} from '../MessageTypes/ChannelUserChangeMessage
 import {ParserServer} from '../ParserServer';
 import {DynamicParser} from '../DynamicParser';
 import {Events} from '../EventList';
+import {ExEvent} from '../EventList';
 import * as path from 'path';
 
 export class ChannelUserChange implements IParser<any> {
@@ -14,10 +15,10 @@ export class ChannelUserChange implements IParser<any> {
 
         callback(server, msg);
 
-        msg.command = original_command + ":" + msg.destination.display;
+        msg.updateCommandString(ExEvent.create(original_command, msg.destination.display));
         callback(server, msg);
 
-        msg.command = original_command + ":" + (<Core.User>msg.from).nick;
+        msg.updateCommandString(ExEvent.create(original_command, (<Core.User>msg.from).nick));
         callback(server, msg);
 
         return true;
@@ -40,7 +41,7 @@ export class ChannelUserChange implements IParser<any> {
     }
 
     // We are resuming. No state required for a parser
-    resume(state : any) : void {
+    resume(context : any, state : any) : void {
         throw new Error("Don't resume a parser. Please call init");
     }
 

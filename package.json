@@ -23,6 +23,6 @@
   "license": "MIT",
   "dependencies": {
     "dab.irc.core": "^1.0.0",
-    "tsunit.external": "^2.0.1"
+    "tsunit.external": "^2.0.10"
   }
 }
