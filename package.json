@@ -22,6 +22,7 @@
   "author": "dab",
   "license": "MIT",
   "dependencies": {
+    "@types/node": "0.0.2",
     "dab.irc.core": "^1.0.0",
     "tsunit.external": "^2.0.10"
   }

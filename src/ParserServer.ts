@@ -14,7 +14,8 @@ export class ParserServer extends Core.BaseServer {
     }
     constructor(context : Core.IConnectionContext, connection: Core.Connection, parser:DynamicParser = new DynamicParser()) {
         super(context.host);
-
+        
+        context.dataCallback = this.dataReceived;
         this.connection = connection;
         this._parser = parser;
         let names = getParserNames();
@@ -23,7 +24,7 @@ export class ParserServer extends Core.BaseServer {
         }
 
         this.events = new EventEmitter();
-
+        
         this.on(EventList.Events.PING, (s:ParserServer, m:Core.Message) => {
             // We could leave this to the context implementation to do, but 
             // in the instnace of a bot with a message queue, we'd want to send PONG
@@ -69,7 +70,7 @@ export class ParserServer extends Core.BaseServer {
     listeners(event: string) : Function[] {
         return this.events.listeners(event);
     }
-    eventNames() : string[] {
+    eventNames() : (string|symbol)[] {
         return this.events.eventNames();
     }
     ///

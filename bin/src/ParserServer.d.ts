@@ -16,7 +16,7 @@ export declare class ParserServer extends Core.BaseServer {
     removeListener(event: string, listener: Function): void;
     removeAllListeners(event?: string): void;
     listeners(event: string): Function[];
-    eventNames(): string[];
+    eventNames(): (string | symbol)[];
     toString(): string;
     isChannel(ch: string): boolean;
     private events;
