@@ -17,6 +17,7 @@ class ParserServer extends Core.BaseServer {
                 this.emit(data.command, this, data);
             }
         };
+        context.dataCallback = this.dataReceived;
         this.connection = connection;
         this._parser = parser;
         let names = Parsers_1.getParserNames();
