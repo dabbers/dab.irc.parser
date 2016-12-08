@@ -90,6 +90,6 @@ export class ParserServer extends Core.BaseServer {
         return (this.attributes["CHANTYPES"].indexOf(ch[0]) != -1); 
     }
 
-    private events : EventEmitter;
+    protected events : EventEmitter;
     protected _parser : DynamicParser;
 }

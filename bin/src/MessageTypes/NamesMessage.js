@@ -30,7 +30,7 @@ class NamesMessage extends Core.Message {
             this.tokenized[5] = this.tokenized[5].substr(1);
         for (let i = 5; i < this.tokenized.length; i++) {
             if (!this.tokenized[i])
-                throw new Error("Why is this item empty?");
+                throw new Error("Why is this item empty? Index: " + i + "/" + this.tokenized.length);
             let user;
             let entry = this.tokenized[i];
             let identIndx = entry.indexOf("!");

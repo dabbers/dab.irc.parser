@@ -1,5 +1,7 @@
+/// <reference types="node" />
 import * as Core from 'dab.irc.core/src';
 import { Message } from 'dab.irc.core/src/Message';
+import { EventEmitter } from 'events';
 import { DynamicParser } from './DynamicParser';
 export declare class ParserServer extends Core.BaseServer {
     attributes: {
@@ -19,6 +21,6 @@ export declare class ParserServer extends Core.BaseServer {
     eventNames(): (string | symbol)[];
     toString(): string;
     isChannel(ch: string): boolean;
-    private events;
+    protected events: EventEmitter;
     protected _parser: DynamicParser;
 }

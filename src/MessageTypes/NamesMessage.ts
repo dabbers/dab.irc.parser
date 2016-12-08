@@ -43,7 +43,7 @@ export class NamesMessage extends Core.Message {
 
         for(let i = 5; i < this.tokenized.length; i++) {
             // not sure why this is here? Ported over from dabbit.base. Just in case
-            if (!this.tokenized[i]) throw new Error("Why is this item empty?");
+            if (!this.tokenized[i]) throw new Error("Why is this item empty? Index: " + i + "/" + this.tokenized.length);
             
             let user : Core.User;
 
