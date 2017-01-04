@@ -26,7 +26,7 @@ class ParserServer extends Core.BaseServer {
         }
         this.events = new events_1.EventEmitter();
         this.on(EventList.Events.PING, (s, m) => {
-            s.connection.write("PONG " + m.tokenized[1]);
+            this.connection.write("PONG " + m.tokenized[1]);
         });
     }
     get parser() {

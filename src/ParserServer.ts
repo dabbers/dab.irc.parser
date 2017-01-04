@@ -29,7 +29,7 @@ export class ParserServer extends Core.BaseServer {
             // We could leave this to the context implementation to do, but 
             // in the instnace of a bot with a message queue, we'd want to send PONG
             // responses asap to prevent a timeout.
-            s.connection.write("PONG " + m.tokenized[1]);
+            this.connection.write("PONG " + m.tokenized[1]);
         });
     }
 
